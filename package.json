@@ -8,6 +8,26 @@
   "devDependencies": {
     "jake": "^8.0.12",
     "jshint": "^2.9.3",
-    "semver": "^5.3.0"
+    "semver": "^5.3.0",
+    "simplebuild-jshint": "^1.3.0"
+  },
+  "jshintConfig": {
+    "bitwise": true,
+    "eqeqeq": true,
+    "forin": true,
+    "freeze": true,
+    "futurehostile": true,
+    "latedef": "nofunc",
+    "noarg": true,
+    "nocomma": true,
+    "nonbsp": true,
+    "nonew": true,
+    "strict": true,
+    "undef": true,
+    "unused": "vars",
+
+    "browser": true,
+    "node": true,
+    "mocha": true
   }
 }
