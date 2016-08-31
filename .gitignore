@@ -1,2 +1,5 @@
 # IDEA settings files
 .idea/workspace.xml
+
+# npm
+node_modules/**/.bin
