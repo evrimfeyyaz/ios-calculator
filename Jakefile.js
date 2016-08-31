@@ -46,7 +46,7 @@
     var packageJson = require("./package.json");
 
     jshint.checkFiles({
-      files: "Jakefile.js",
+      files: [ "Jakefile.js", "src/**/*.js" ],
       options: packageJson.jshintConfig,
       globals: {}
     }, complete, fail);
