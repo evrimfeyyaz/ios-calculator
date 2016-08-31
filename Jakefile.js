@@ -2,7 +2,7 @@
  * Created by Evrim Persembe on 8/31/16.
  */
 
-/* global desc:true, task:true, fail:true, complete:true */
+/* global desc:true, task:true, fail:true, complete:true, jake:true */
 
 (function () {
   "use strict";
@@ -10,10 +10,19 @@
   var semver = require("semver");
   var jshint = require("simplebuild-jshint");
 
+  /* General-purpose tasks */
+
   desc("Default build");
   task("default", [ "node_version", "lint" ], function() {
     console.log("BUILD OK!");
   });
+
+  desc("Run a local server");
+  task("run", function() {
+    jake.exec("node node_modules/.bin/http-server src", { interactive: true });
+  }, { async: true });
+
+  /* Supporting tasks */
 
   desc("Check Node version");
   task("node_version", function() {
