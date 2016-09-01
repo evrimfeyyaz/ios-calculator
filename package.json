@@ -6,6 +6,7 @@
     "node": "6.5.0"
   },
   "devDependencies": {
+    "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "http-server": "^0.9.0",
     "jake": "^8.0.12",
