@@ -61,7 +61,7 @@
     jshint.checkFiles({
       files: [ "Jakefile.js", "src/**/*.js" ],
       options: packageJson.jshintConfig,
-      globals: {}
+      globals: packageJson.jshintConfig.globals
     }, complete, fail);
   }, { async: true });
 
