@@ -65,13 +65,13 @@
 
     // Get the JSHint options from package.json so
     // we can use the same settings in JetBrains IDEs.
-    // TODO: Rename this variable to "lintOptions".
-    var packageJson = require("./package.json");
+    var lintOptions = require("./package.json").jshintConfig;
+    var lintGlobals = lintOptions.globals;
 
     jshint.checkFiles({
       files: [ "Jakefile.js", "src/**/*.js" ],
-      options: packageJson.jshintConfig,
-      globals: packageJson.jshintConfig.globals
+      options: lintOptions,
+      globals: lintGlobals
     }, complete, fail);
   }, { async: true });
 
