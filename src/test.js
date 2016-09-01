@@ -4,10 +4,10 @@
 
 (function () {
   "use strict";
-
+  
   describe("Hello", function() {
     it("World", function() {
-      
+      assert.equal(true, true);
     });
   });
 }());
