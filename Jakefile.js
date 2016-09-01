@@ -2,7 +2,7 @@
  * Created by Evrim Persembe on 8/31/16.
  */
 
-/* global desc:true, task:true, fail:true, complete:true, jake:true */
+/* global desc:true, task:true, fail:true, complete:true, jake:true, directory:true */
 
 (function () {
   "use strict";
@@ -10,8 +10,11 @@
   var semver = require("semver");
   var jshint = require("simplebuild-jshint");
   var karma  = require("simplebuild-karma");
+  var shell  = require("shelljs");
 
-  var KARMA_CONFIG = "karma.conf.js";
+  var KARMA_CONFIG  = "karma.conf.js";
+  var GENERATED_DIR = "generated";
+  var DIST_DIR      = GENERATED_DIR + "/dist";
 
   /* General-purpose tasks */
 
@@ -30,9 +33,16 @@
   });
 
   desc("Run a local server");
-  task("run", function() {
-    jake.exec("node node_modules/.bin/http-server src", { interactive: true });
+  task("run", [ "build" ], function() {
+    jake.exec("node node_modules/.bin/http-server " + DIST_DIR, { interactive: true });
   }, { async: true });
+
+  desc("Erase all generated files");
+  task("clean", function() {
+    console.log("Erasing generated files: .");
+
+    shell.rm("-rf", GENERATED_DIR);
+  });
 
   /* Supporting tasks */
 
@@ -81,4 +91,18 @@
       strict: !process.env.loose
     }, complete, fail);
   }, { async: true });
+
+  desc("Build distribution directory");
+  task("build", [ DIST_DIR ], function() {
+    console.log("Building distribution directory: .");
+
+    shell.rm("-rf", DIST_DIR + "/*");
+    shell.cp("src/content/*", DIST_DIR);
+
+    jake.exec("node node_modules/.bin/browserify src/javascript/app.js -o " + DIST_DIR + "/bundle.js",
+      { interactive: true },
+      complete);
+  }, { async: true });
+
+  directory(DIST_DIR);
 }());
