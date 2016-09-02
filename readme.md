@@ -1,4 +1,4 @@
-IOS Calculator in JavaScript
+iOS Calculator in JavaScript
 ----------------------------
 
 1. Run `./jake.sh` to build.
