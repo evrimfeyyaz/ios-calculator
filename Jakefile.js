@@ -84,7 +84,7 @@
       expectedBrowsers: [
         "Chrome 52.0.2743 (Mac OS X 10.11.6)",
         "IE 9.0.0 (Windows 7 0.0.0)",
-        "Safari 9.1.2 (Mac OS X 10.11.6)",
+        "Safari 9.1.3 (Mac OS X 10.11.6)",
         "Firefox 48.0.0 (Mac OS X 10.11.0)",
         "Mobile Safari 9.0.0 (iOS 9.3.0)"
       ],
