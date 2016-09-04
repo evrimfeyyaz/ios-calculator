@@ -9,7 +9,7 @@
   var secondOperand     = null;
   var currentOperator   = null;
 
-  var waitingForOperandInput  = true;
+  var isOperatorAlreadySet  = true;
 
   var priorityOperator  = null;
   var thirdOperand      = null;
@@ -35,7 +35,7 @@
       secondOperand = number;
     }
 
-    waitingForOperandInput = false;
+    isOperatorAlreadySet = false;
   };
 
   exports.setOperator = function(newOperator) {
@@ -43,20 +43,22 @@
       calculatePendingPriorityOperation();
     }
 
-    if (isNewOperatorPriority(newOperator)) {
-      priorityOperator = newOperator;
+    if (!justChangingOperator()) {
+      if (isNewOperatorPriority(newOperator)) {
+        priorityOperator = newOperator;
 
-      return;
-    }
+        return;
+      }
 
-    if (hasPendingOperation()) {
-      firstOperand = exports.calculate();
-      secondOperand = null;
+      if (hasPendingOperation()) {
+        firstOperand = exports.calculate();
+        secondOperand = null;
+      }
     }
 
     currentOperator = newOperator;
 
-    waitingForOperandInput = true;
+    isOperatorAlreadySet = true;
   };
 
   exports.calculate = function() {
@@ -100,15 +102,15 @@
   }
 
   function isNewOperatorPriority(newOperator) {
-    if (waitingForOperandInput) return false;
-
     return (currentOperator === ADDITION || currentOperator === SUBTRACTION) &&
     (newOperator === MULTIPLICATION || newOperator === DIVISION);
   }
 
   function hasPendingOperation() {
-    if (waitingForOperandInput) return false;
-
     return currentOperator !== null;
+  }
+
+  function justChangingOperator() {
+    return isOperatorAlreadySet;
   }
 }());
