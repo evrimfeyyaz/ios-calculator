@@ -9,6 +9,8 @@
   var secondOperand     = null;
   var currentOperator   = null;
 
+  var waitingForOperandInput  = true;
+
   var priorityOperator  = null;
   var thirdOperand      = null;
 
@@ -32,6 +34,8 @@
     } else {
       secondOperand = number;
     }
+
+    waitingForOperandInput = false;
   };
 
   exports.setOperator = function(newOperator) {
@@ -51,6 +55,8 @@
     }
 
     currentOperator = newOperator;
+
+    waitingForOperandInput = true;
   };
 
   exports.calculate = function() {
@@ -83,7 +89,6 @@
     }
   }
 
-  // TODO: Change all "calculate" to "calculate".
   function calculatePendingPriorityOperation() {
     secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
     priorityOperator = null;
@@ -95,11 +100,15 @@
   }
 
   function isNewOperatorPriority(newOperator) {
+    if (waitingForOperandInput) return false;
+
     return (currentOperator === ADDITION || currentOperator === SUBTRACTION) &&
     (newOperator === MULTIPLICATION || newOperator === DIVISION);
   }
 
   function hasPendingOperation() {
+    if (waitingForOperandInput) return false;
+
     return currentOperator !== null;
   }
 }());

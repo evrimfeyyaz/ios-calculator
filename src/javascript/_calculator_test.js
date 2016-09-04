@@ -122,7 +122,19 @@
       assert.equal(result, 30);
     });
 
-    it("can change the operation when it is already set");
+    it("can change the operation when it is already set", function() {
+      calculator.inputOperand(10);
+      calculator.setOperator(calculator.OperatorsEnum.ADDITION);
+      calculator.setOperator(calculator.OperatorsEnum.SUBTRACTION);
+      calculator.inputOperand(2);
+      calculator.setOperator(calculator.OperatorsEnum.ADDITION);
+      calculator.setOperator(calculator.OperatorsEnum.MULTIPLICATION);
+      calculator.inputOperand(5);
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 40);
+    });
 
     it("can change the priority operation when it is already set");
 
@@ -141,5 +153,7 @@
     it("doesn't push a result notification when a priority operation is set, but there is no intermediate result");
 
     it("pushes a result notification when an intermediate result is calculated when a priority operation is set");
+
+    it("uses 0 as the first operand if it isn't set");
   });
 }());
