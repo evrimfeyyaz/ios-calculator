@@ -83,8 +83,10 @@
     }
   }
 
+  // TODO: Change all "compute" to "calculate".
   function computePendingPriorityOperation() {
     secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
+    priorityOperator = null;
     thirdOperand = null;
   }
 
