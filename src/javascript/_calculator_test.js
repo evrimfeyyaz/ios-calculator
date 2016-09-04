@@ -17,7 +17,7 @@
       calculator.setOperator(calculator.OperatorsEnum.ADDITION);
       calculator.inputOperand(6);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 11);
     });
@@ -27,7 +27,7 @@
       calculator.setOperator(calculator.OperatorsEnum.SUBTRACTION);
       calculator.inputOperand(10);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, -3);
     });
@@ -37,7 +37,7 @@
       calculator.setOperator(calculator.OperatorsEnum.MULTIPLICATION);
       calculator.inputOperand(9);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 36);
     });
@@ -47,7 +47,7 @@
       calculator.setOperator(calculator.OperatorsEnum.DIVISION);
       calculator.inputOperand(2);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 5);
     });
@@ -59,7 +59,7 @@
       calculator.setOperator(calculator.OperatorsEnum.SUBTRACTION);
       calculator.inputOperand(3);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 12);
     });
@@ -71,7 +71,7 @@
       calculator.setOperator(calculator.OperatorsEnum.DIVISION);
       calculator.inputOperand(2);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 25);
     });
@@ -85,7 +85,7 @@
       calculator.setOperator(calculator.OperatorsEnum.MULTIPLICATION);
       calculator.inputOperand(2);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 63);
     });
@@ -99,7 +99,7 @@
       calculator.setOperator(calculator.OperatorsEnum.DIVISION);
       calculator.inputOperand(7);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 11);
     });
@@ -117,7 +117,7 @@
       calculator.setOperator(calculator.OperatorsEnum.DIVISION);
       calculator.inputOperand(2);
 
-      var result = calculator.compute();
+      var result = calculator.calculate();
 
       assert.equal(result, 30);
     });

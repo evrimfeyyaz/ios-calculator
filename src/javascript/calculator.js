@@ -36,7 +36,7 @@
 
   exports.setOperator = function(newOperator) {
     if (hasPendingPriorityOperation()) {
-      computePendingPriorityOperation();
+      calculatePendingPriorityOperation();
     }
 
     if (isNewOperatorPriority(newOperator)) {
@@ -46,16 +46,16 @@
     }
 
     if (hasPendingOperation()) {
-      firstOperand = exports.compute();
+      firstOperand = exports.calculate();
       secondOperand = null;
     }
 
     currentOperator = newOperator;
   };
 
-  exports.compute = function() {
+  exports.calculate = function() {
     if (hasPendingPriorityOperation()) {
-      computePendingPriorityOperation();
+      calculatePendingPriorityOperation();
     }
 
     return getOperationResult(firstOperand, secondOperand, currentOperator);
@@ -83,8 +83,8 @@
     }
   }
 
-  // TODO: Change all "compute" to "calculate".
-  function computePendingPriorityOperation() {
+  // TODO: Change all "calculate" to "calculate".
+  function calculatePendingPriorityOperation() {
     secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
     priorityOperator = null;
     thirdOperand = null;
