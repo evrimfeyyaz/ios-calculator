@@ -5,46 +5,81 @@
 (function () {
   "use strict";
 
-  var firstOperand  = null;
-  var secondOperand = null;
-  var operator      = null;
+  var firstOperand      = null;
+  var secondOperand     = null;
+  var currentOperator   = null;
 
-  var OperatorsEnum = {
+  var priorityOperator  = null;
+  var thirdOperand      = null;
+
+  exports.OperatorsEnum = {
     ADDITION: 0,
     SUBTRACTION: 1,
     MULTIPLICATION: 2,
     DIVISION: 3
   };
-  exports.OperatorsEnum = OperatorsEnum;
+
+  var ADDITION        = exports.OperatorsEnum.ADDITION;
+  var SUBTRACTION     = exports.OperatorsEnum.SUBTRACTION;
+  var MULTIPLICATION  = exports.OperatorsEnum.MULTIPLICATION;
+  var DIVISION        = exports.OperatorsEnum.DIVISION;
 
   exports.inputOperand = function(number) {
-    if (operator === null) {
+    if (priorityOperator !== null) {
+      thirdOperand = number;
+    } else if (currentOperator === null) {
       firstOperand = number;
     } else {
       secondOperand = number;
     }
   };
 
-  exports.setOperator = function(operatorEnum) {
-    operator = operatorEnum;
-  };
+  exports.setOperator = function(newOperator) {
+    if (priorityOperator !== null) {
+      secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
+      thirdOperand = null;
+    }
 
-  exports.compute = function() {
-    switch (operator) {
-      case OperatorsEnum.ADDITION:
-        return firstOperand + secondOperand;
-      case OperatorsEnum.SUBTRACTION:
-        return firstOperand - secondOperand;
-      case OperatorsEnum.MULTIPLICATION:
-        return firstOperand * secondOperand;
-      case OperatorsEnum.DIVISION:
-        return firstOperand / secondOperand;
+    if ((currentOperator === ADDITION || currentOperator === SUBTRACTION) &&
+      (newOperator === MULTIPLICATION || newOperator === DIVISION)) {
+      priorityOperator = newOperator;
+    } else {
+      if (currentOperator !== null) {
+        firstOperand = exports.compute();
+        secondOperand = null;
+      }
+
+      currentOperator = newOperator;
     }
   };
 
-  exports.allClear = function() {
-    firstOperand  = null;
-    secondOperand = null;
-    operator      = null;
+  exports.compute = function() {
+    if (priorityOperator !== null) {
+      secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
+    }
+
+    return getOperationResult(firstOperand, secondOperand, currentOperator);
   };
+
+  exports.allClear = function() {
+    firstOperand      = null;
+    secondOperand     = null;
+    currentOperator   = null;
+
+    priorityOperator  = null;
+    thirdOperand      = null;
+  };
+
+  function getOperationResult(firstOperand, secondOperand, operator) {
+    switch (operator) {
+      case ADDITION:
+        return firstOperand + secondOperand;
+      case SUBTRACTION:
+        return firstOperand - secondOperand;
+      case MULTIPLICATION:
+        return firstOperand * secondOperand;
+      case DIVISION:
+        return firstOperand / secondOperand;
+    }
+  }
 }());
