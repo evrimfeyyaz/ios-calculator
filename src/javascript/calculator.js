@@ -39,21 +39,36 @@
   };
 
   exports.setOperator = function(newOperator) {
-    if (hasPendingPriorityOperation()) {
-      calculatePendingPriorityOperation();
-    }
-
-    if (!justChangingOperator()) {
-      if (isNewOperatorPriority(newOperator)) {
+    if (isOperatorAlreadySet) {
+      if (hasPendingPriorityOperation() && isNewOperatorPriority(newOperator)) {
         priorityOperator = newOperator;
 
         return;
       }
 
-      if (hasPendingOperation()) {
-        firstOperand = exports.calculate();
-        secondOperand = null;
+      if (hasPendingPriorityOperation() && !isNewOperatorPriority(newOperator)) {
+        priorityOperator = null;
+
+        exports.calculate();
       }
+
+      currentOperator = newOperator;
+    }
+
+    if (hasPendingPriorityOperation()) {
+      calculatePendingPriorityOperation();
+    }
+
+    if (isNewOperatorPriority(newOperator)) {
+      priorityOperator = newOperator;
+
+      isOperatorAlreadySet = true;
+
+      return;
+    }
+
+    if (hasPendingOperation()) {
+      exports.calculate();
     }
 
     currentOperator = newOperator;
@@ -66,7 +81,10 @@
       calculatePendingPriorityOperation();
     }
 
-    return getOperationResult(firstOperand, secondOperand, currentOperator);
+    firstOperand = getOperationResult(firstOperand, secondOperand, currentOperator);
+    secondOperand = null;
+
+    return firstOperand;
   };
 
   exports.allClear = function() {
@@ -107,10 +125,12 @@
   }
 
   function hasPendingOperation() {
-    return currentOperator !== null;
+    if (isOperatorAlreadySet) return false;
+
+    return (currentOperator !== null && secondOperand !== null);
   }
 
-  function justChangingOperator() {
-    return isOperatorAlreadySet;
-  }
+  // function justChangingOperator() {
+  //   return isOperatorAlreadySet;
+  // }
 }());
