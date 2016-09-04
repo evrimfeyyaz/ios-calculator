@@ -35,27 +35,27 @@
   };
 
   exports.setOperator = function(newOperator) {
-    if (priorityOperator !== null) {
-      secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
-      thirdOperand = null;
+    if (hasPendingPriorityOperation()) {
+      computePendingPriorityOperation();
     }
 
-    if ((currentOperator === ADDITION || currentOperator === SUBTRACTION) &&
-      (newOperator === MULTIPLICATION || newOperator === DIVISION)) {
+    if (isNewOperatorPriority(newOperator)) {
       priorityOperator = newOperator;
-    } else {
-      if (currentOperator !== null) {
-        firstOperand = exports.compute();
-        secondOperand = null;
-      }
 
-      currentOperator = newOperator;
+      return;
     }
+
+    if (hasPendingOperation()) {
+      firstOperand = exports.compute();
+      secondOperand = null;
+    }
+
+    currentOperator = newOperator;
   };
 
   exports.compute = function() {
-    if (priorityOperator !== null) {
-      secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
+    if (hasPendingPriorityOperation()) {
+      computePendingPriorityOperation();
     }
 
     return getOperationResult(firstOperand, secondOperand, currentOperator);
@@ -81,5 +81,23 @@
       case DIVISION:
         return firstOperand / secondOperand;
     }
+  }
+
+  function computePendingPriorityOperation() {
+    secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
+    thirdOperand = null;
+  }
+
+  function hasPendingPriorityOperation() {
+    return priorityOperator !== null;
+  }
+
+  function isNewOperatorPriority(newOperator) {
+    return (currentOperator === ADDITION || currentOperator === SUBTRACTION) &&
+    (newOperator === MULTIPLICATION || newOperator === DIVISION);
+  }
+
+  function hasPendingOperation() {
+    return currentOperator !== null;
   }
 }());
