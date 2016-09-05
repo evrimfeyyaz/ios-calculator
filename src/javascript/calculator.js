@@ -12,7 +12,7 @@
   var lastOperand   = null;
   var lastOperation  = null;
 
-  var isOperatorAlreadySet  = true;
+  var operatorIsSet  = true;
 
   var priorityOperator  = null;
   var thirdOperand      = null;
@@ -41,11 +41,15 @@
 
     lastOperand = number;
 
-    isOperatorAlreadySet = false;
+    operatorIsSet = false;
   };
 
   exports.operation = function(newOperator) {
-    if (isOperatorAlreadySet) {
+    if (firstOperand === null) {
+      firstOperand = 0;
+    }
+    
+    if (isOperatorAlreadySet()) {
       if (hasPendingPriorityOperation() && isNewOperatorPriority(newOperator)) {
         setPriorityOperator(newOperator);
 
@@ -134,7 +138,7 @@
   }
 
   function hasPendingOperation() {
-    if (isOperatorAlreadySet) return false;
+    if (isOperatorAlreadySet()) return false;
 
     return (currentOperator !== null && secondOperand !== null);
   }
@@ -143,7 +147,7 @@
     priorityOperator = newPriorityOperator;
     lastOperation = priorityOperator;
 
-    isOperatorAlreadySet = true;
+    operatorIsSet = true;
   }
 
   function removePriorityOperator() {
@@ -154,10 +158,14 @@
     currentOperator = newOperator;
     lastOperation = currentOperator;
 
-    isOperatorAlreadySet = true;
+    operatorIsSet = true;
   }
 
   function removeOperator() {
     currentOperator = null;
+  }
+
+  function isOperatorAlreadySet() {
+    return operatorIsSet && currentOperator !== null;
   }
 }());

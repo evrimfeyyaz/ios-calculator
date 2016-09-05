@@ -230,20 +230,23 @@
       assert.equal(result, 125);
     });
 
-    it("can clear the operand when there is no operation set");
+    it("pushes a result notification when an intermediate result is calculated when a priority operation is set");
 
-    it("can clear the operand when there is an operation set");
+    it("uses 0 as the first operand if it isn't set", function() {
+      calculator.operation(MULTIPLICATION);
+      calculator.inputOperand(5);
+      calculator.operation(ADDITION);
+      calculator.inputOperand(2);
 
-    it("can clear the operand when there is a priority operation set");
+      var result = calculator.calculate();
+
+      assert.equal(result, 2);
+    });
+
+    it("clears last operand and operation memory when asked to 'all clear'");
 
     it("pushes a notification when an intermediate or end result is calculated");
 
     it("doesn't push a result notification when a priority operation is set, but there is no intermediate result");
-
-    it("pushes a result notification when an intermediate result is calculated when a priority operation is set");
-
-    it("uses 0 as the first operand if it isn't set");
-
-    it("clears last operand and operation memory when asked to 'all clear'");
   });
 }());
