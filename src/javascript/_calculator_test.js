@@ -230,8 +230,6 @@
       assert.equal(result, 125);
     });
 
-    it("pushes a result notification when an intermediate result is calculated when a priority operation is set");
-
     it("uses 0 as the first operand if it isn't set", function() {
       calculator.operation(MULTIPLICATION);
       calculator.inputOperand(5);
@@ -243,7 +241,19 @@
       assert.equal(result, 2);
     });
 
-    it("clears last operand and operation memory when asked to 'all clear'");
+    it("clears last operand and operation memory when asked to 'all clear'", function() {
+      calculator.inputOperand(5);
+      calculator.operation(ADDITION);
+      calculator.inputOperand(10);
+      calculator.calculate();
+      calculator.allClear();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 0);
+    });
+
+    it("pushes a result notification when an intermediate result is calculated when a priority operation is set");
 
     it("pushes a notification when an intermediate or end result is calculated");
 

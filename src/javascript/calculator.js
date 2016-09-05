@@ -48,7 +48,7 @@
     if (firstOperand === null) {
       firstOperand = 0;
     }
-    
+
     if (isOperatorAlreadySet()) {
       if (hasPendingPriorityOperation() && isNewOperatorPriority(newOperator)) {
         setPriorityOperator(newOperator);
@@ -83,6 +83,10 @@
   };
 
   exports.calculate = function() {
+    if (firstOperand === null) {
+      return 0;
+    }
+
     if (currentOperator === null || secondOperand === null) {
       firstOperand = getOperationResult(firstOperand, lastOperand, lastOperation);
 
@@ -104,6 +108,11 @@
     firstOperand      = null;
     secondOperand     = null;
     currentOperator   = null;
+
+    lastOperand   = null;
+    lastOperation  = null;
+
+    operatorIsSet  = true;
 
     priorityOperator  = null;
     thirdOperand      = null;
