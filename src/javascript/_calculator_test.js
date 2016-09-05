@@ -7,10 +7,10 @@
 
   var calculator = require("./calculator.js");
 
-  var ADDITION = calculator.OperatorsEnum.ADDITION;
-  var SUBTRACTION = calculator.OperatorsEnum.SUBTRACTION;
-  var MULTIPLICATION = calculator.OperatorsEnum.MULTIPLICATION;
-  var DIVISION = calculator.OperatorsEnum.DIVISION;
+  var ADDITION = calculator.OperationsEnum.ADDITION;
+  var SUBTRACTION = calculator.OperationsEnum.SUBTRACTION;
+  var MULTIPLICATION = calculator.OperationsEnum.MULTIPLICATION;
+  var DIVISION = calculator.OperationsEnum.DIVISION;
 
   describe("Calculator", function() {
     afterEach(function() {
@@ -19,7 +19,7 @@
 
     it("can add two numbers", function() {
       calculator.inputOperand(5);
-      calculator.setOperator(ADDITION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(6);
 
       var result = calculator.calculate();
@@ -29,7 +29,7 @@
 
     it("can subtract two numbers", function() {
       calculator.inputOperand(7);
-      calculator.setOperator(SUBTRACTION);
+      calculator.operation(SUBTRACTION);
       calculator.inputOperand(10);
 
       var result = calculator.calculate();
@@ -39,7 +39,7 @@
 
     it("can multiply two numbers", function() {
       calculator.inputOperand(4);
-      calculator.setOperator(MULTIPLICATION);
+      calculator.operation(MULTIPLICATION);
       calculator.inputOperand(9);
 
       var result = calculator.calculate();
@@ -49,7 +49,7 @@
 
     it("can divide two numbers", function() {
       calculator.inputOperand(10);
-      calculator.setOperator(DIVISION);
+      calculator.operation(DIVISION);
       calculator.inputOperand(2);
 
       var result = calculator.calculate();
@@ -59,9 +59,9 @@
 
     it("can combine additions and subtractions together", function() {
       calculator.inputOperand(5);
-      calculator.setOperator(ADDITION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(10);
-      calculator.setOperator(SUBTRACTION);
+      calculator.operation(SUBTRACTION);
       calculator.inputOperand(3);
 
       var result = calculator.calculate();
@@ -71,9 +71,9 @@
 
     it("can combine multiplications and divisions together", function() {
       calculator.inputOperand(5);
-      calculator.setOperator(MULTIPLICATION);
+      calculator.operation(MULTIPLICATION);
       calculator.inputOperand(10);
-      calculator.setOperator(DIVISION);
+      calculator.operation(DIVISION);
       calculator.inputOperand(2);
 
       var result = calculator.calculate();
@@ -83,11 +83,11 @@
 
     it("can combine operands of multiple multiplication right after addition (e.g. '3+(5*6*2)')", function() {
       calculator.inputOperand(3);
-      calculator.setOperator(ADDITION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(5);
-      calculator.setOperator(MULTIPLICATION);
+      calculator.operation(MULTIPLICATION);
       calculator.inputOperand(6);
-      calculator.setOperator(MULTIPLICATION);
+      calculator.operation(MULTIPLICATION);
       calculator.inputOperand(2);
 
       var result = calculator.calculate();
@@ -97,11 +97,11 @@
 
     it("can combine operands of multiple divisions right after subtraction (e.g. '12-(14/2/7)')", function() {
       calculator.inputOperand(12);
-      calculator.setOperator(SUBTRACTION);
+      calculator.operation(SUBTRACTION);
       calculator.inputOperand(14);
-      calculator.setOperator(DIVISION);
+      calculator.operation(DIVISION);
       calculator.inputOperand(2);
-      calculator.setOperator(DIVISION);
+      calculator.operation(DIVISION);
       calculator.inputOperand(7);
 
       var result = calculator.calculate();
@@ -111,15 +111,15 @@
 
     it("can combine all four operations (e.g. '3+(5*6)+2-(10/2)'", function() {
       calculator.inputOperand(3);
-      calculator.setOperator(ADDITION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(5);
-      calculator.setOperator(MULTIPLICATION);
+      calculator.operation(MULTIPLICATION);
       calculator.inputOperand(6);
-      calculator.setOperator(ADDITION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(2);
-      calculator.setOperator(SUBTRACTION);
+      calculator.operation(SUBTRACTION);
       calculator.inputOperand(10);
-      calculator.setOperator(DIVISION);
+      calculator.operation(DIVISION);
       calculator.inputOperand(2);
 
       var result = calculator.calculate();
@@ -129,11 +129,11 @@
 
     it("can change a non-priority operation to another non-priority operation when it is already set", function() {
       calculator.inputOperand(10);
-      calculator.setOperator(ADDITION);
-      calculator.setOperator(SUBTRACTION);
+      calculator.operation(ADDITION);
+      calculator.operation(SUBTRACTION);
       calculator.inputOperand(2);
-      calculator.setOperator(SUBTRACTION);
-      calculator.setOperator(ADDITION);
+      calculator.operation(SUBTRACTION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(5);
 
       var result = calculator.calculate();
@@ -143,11 +143,11 @@
 
     it("can change a non-priority operation to a priority operation when it is already set", function() {
       calculator.inputOperand(10);
-      calculator.setOperator(ADDITION);
-      calculator.setOperator(MULTIPLICATION);
+      calculator.operation(ADDITION);
+      calculator.operation(MULTIPLICATION);
       calculator.inputOperand(2);
-      calculator.setOperator(ADDITION);
-      calculator.setOperator(DIVISION);
+      calculator.operation(ADDITION);
+      calculator.operation(DIVISION);
       calculator.inputOperand(5);
 
       var result = calculator.calculate();
@@ -157,10 +157,10 @@
 
     it("can change a priority operation to non-priority operation when it is already set", function() {
       calculator.inputOperand(8);
-      calculator.setOperator(ADDITION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(5);
-      calculator.setOperator(MULTIPLICATION);
-      calculator.setOperator(ADDITION);
+      calculator.operation(MULTIPLICATION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(10);
 
       var result = calculator.calculate();
@@ -170,10 +170,10 @@
 
     it("can change a priority operation to another priority operation when it is already set", function() {
       calculator.inputOperand(8);
-      calculator.setOperator(ADDITION);
+      calculator.operation(ADDITION);
       calculator.inputOperand(10);
-      calculator.setOperator(MULTIPLICATION);
-      calculator.setOperator(DIVISION);
+      calculator.operation(MULTIPLICATION);
+      calculator.operation(DIVISION);
       calculator.inputOperand(2);
 
       var result = calculator.calculate();
@@ -181,9 +181,54 @@
       assert.equal(result, 13);
     });
 
-    it("repeats the last operation when repeatedly asked for the computation (e.g. 5,*,2,=,= is '5*2*2*2')");
+    it("repeats the last operation when repeatedly asked for the calculated result (e.g. 5,*,2,=,= is '5*2*2')", function() {
+      calculator.inputOperand(5);
+      calculator.operation(MULTIPLICATION);
+      calculator.inputOperand(2);
+      calculator.calculate();
 
-    it("repeats the operation on the same number when repeatedly set the same operation (e.g. 5,*,=,= is '5*5*5*5");
+      var result = calculator.calculate();
+
+      assert.equal(result, 20);
+    });
+
+    it("repeats the last priority operation when repeatedly asked for the calculated result (e.g. 5,+,6,*,5,=,= is '(5+(6*5))*5", function() {
+      calculator.inputOperand(5);
+      calculator.operation(ADDITION);
+      calculator.inputOperand(6);
+      calculator.operation(MULTIPLICATION);
+      calculator.inputOperand(5);
+      calculator.calculate();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 175);
+    });
+
+    it("doesn't create a priority operation if the result was already calculated (e.g. 5,+,6,*,5,=,*,2,= is '(5+(6*5))*2", function() {
+      calculator.inputOperand(5);
+      calculator.operation(ADDITION);
+      calculator.inputOperand(6);
+      calculator.operation(MULTIPLICATION);
+      calculator.inputOperand(5);
+      calculator.calculate();
+      calculator.operation(MULTIPLICATION);
+      calculator.inputOperand(2);
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 70);
+    });
+
+    it("repeats the operation on the same number when repeatedly set the same operation (e.g. 5,*,=,= is '5*5*5", function() {
+      calculator.inputOperand(5);
+      calculator.operation(MULTIPLICATION);
+      calculator.calculate();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 125);
+    });
 
     it("can clear the operand when there is no operation set");
 
@@ -198,5 +243,7 @@
     it("pushes a result notification when an intermediate result is calculated when a priority operation is set");
 
     it("uses 0 as the first operand if it isn't set");
+
+    it("clears last operand and operation memory when asked to 'all clear'");
   });
 }());

@@ -9,23 +9,27 @@
   var secondOperand     = null;
   var currentOperator   = null;
 
+  var lastOperand   = null;
+  var lastOperation  = null;
+
   var isOperatorAlreadySet  = true;
 
   var priorityOperator  = null;
   var thirdOperand      = null;
 
-  exports.OperatorsEnum = {
+  exports.OperationsEnum = {
     ADDITION: 0,
     SUBTRACTION: 1,
     MULTIPLICATION: 2,
     DIVISION: 3
   };
 
-  var ADDITION        = exports.OperatorsEnum.ADDITION;
-  var SUBTRACTION     = exports.OperatorsEnum.SUBTRACTION;
-  var MULTIPLICATION  = exports.OperatorsEnum.MULTIPLICATION;
-  var DIVISION        = exports.OperatorsEnum.DIVISION;
+  var ADDITION        = exports.OperationsEnum.ADDITION;
+  var SUBTRACTION     = exports.OperationsEnum.SUBTRACTION;
+  var MULTIPLICATION  = exports.OperationsEnum.MULTIPLICATION;
+  var DIVISION        = exports.OperationsEnum.DIVISION;
 
+  // TODO: Find a better name.
   exports.inputOperand = function(number) {
     if (priorityOperator !== null) {
       thirdOperand = number;
@@ -35,24 +39,26 @@
       secondOperand = number;
     }
 
+    lastOperand = number;
+
     isOperatorAlreadySet = false;
   };
 
-  exports.setOperator = function(newOperator) {
+  exports.operation = function(newOperator) {
     if (isOperatorAlreadySet) {
       if (hasPendingPriorityOperation() && isNewOperatorPriority(newOperator)) {
-        priorityOperator = newOperator;
+        setPriorityOperator(newOperator);
 
         return;
       }
 
       if (hasPendingPriorityOperation() && !isNewOperatorPriority(newOperator)) {
-        priorityOperator = null;
+        removePriorityOperator();
 
         exports.calculate();
       }
 
-      currentOperator = newOperator;
+      setOperator(newOperator);
     }
 
     if (hasPendingPriorityOperation()) {
@@ -60,9 +66,7 @@
     }
 
     if (isNewOperatorPriority(newOperator)) {
-      priorityOperator = newOperator;
-
-      isOperatorAlreadySet = true;
+      setPriorityOperator(newOperator);
 
       return;
     }
@@ -71,18 +75,23 @@
       exports.calculate();
     }
 
-    currentOperator = newOperator;
-
-    isOperatorAlreadySet = true;
+    setOperator(newOperator);
   };
 
   exports.calculate = function() {
+    if (currentOperator === null || secondOperand === null) {
+      firstOperand = getOperationResult(firstOperand, lastOperand, lastOperation);
+
+      return firstOperand;
+    }
+
     if (hasPendingPriorityOperation()) {
       calculatePendingPriorityOperation();
     }
 
     firstOperand = getOperationResult(firstOperand, secondOperand, currentOperator);
-    secondOperand = null;
+
+    removeOperator();
 
     return firstOperand;
   };
@@ -111,7 +120,7 @@
 
   function calculatePendingPriorityOperation() {
     secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
-    priorityOperator = null;
+    removePriorityOperator();
     thirdOperand = null;
   }
 
@@ -130,7 +139,25 @@
     return (currentOperator !== null && secondOperand !== null);
   }
 
-  // function justChangingOperator() {
-  //   return isOperatorAlreadySet;
-  // }
+  function setPriorityOperator(newPriorityOperator) {
+    priorityOperator = newPriorityOperator;
+    lastOperation = priorityOperator;
+
+    isOperatorAlreadySet = true;
+  }
+
+  function removePriorityOperator() {
+    priorityOperator = null;
+  }
+
+  function setOperator(newOperator) {
+    currentOperator = newOperator;
+    lastOperation = currentOperator;
+
+    isOperatorAlreadySet = true;
+  }
+
+  function removeOperator() {
+    currentOperator = null;
+  }
 }());
