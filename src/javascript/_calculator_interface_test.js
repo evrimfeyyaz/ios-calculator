@@ -8,26 +8,24 @@
   var calculatorInterface = require("./calculator_interface.js");
 
   describe("Calculator interface", function() {
-    it.only("can display pressed numbers", function() {
-      var container = document.createElement("div");
+    var container,
+      output,
+      numbers = [];
+
+    beforeEach(function() {
+      container = document.createElement("div");
       document.body.appendChild(container);
 
-      var output = document.createElement("div");
-      container.appendChild(output);
+      createDOMElementsForCalculator();
+      initializeCalculator();
+    });
 
-      var i, numbers = [];
-      for (i = 0; i < 10; i++) {
-        numbers[i] = document.createElement("button");
-        numbers[i].dataset.value = i;
-        container.appendChild(numbers[i]);
-      }
+    afterEach(function() {
+      removeElement(container);
+    });
 
-      calculatorInterface.initialize({
-        output: output,
-        numbers: numbers
-      });
-
-      for (i = 1; i < 10; i++) {
+    it("can display pressed numbers", function() {
+      for (var i = 1; i < 10; i++) {
         numbers[i].click();
       }
       numbers[0].click();
@@ -36,5 +34,34 @@
 
       assert.equal(result, "1234567890");
     });
+
+    // Helper functions
+
+    function createDOMElementsForCalculator() {
+      output = createElementInContainer("div");
+
+      for (var i = 0; i < 10; i++) {
+        numbers[i] = createElementInContainer("button");
+        numbers[i].dataset.value = i;
+      }
+    }
+
+    function initializeCalculator() {
+      calculatorInterface.initialize({
+        output: output,
+        numbers: numbers
+      });
+    }
+
+    function createElementInContainer(tagName) {
+      var element = document.createElement(tagName);
+      container.appendChild(element);
+
+      return element;
+    }
+
+    function removeElement(element) {
+      element.parentNode.removeChild(element);
+    }
   });
 }());
