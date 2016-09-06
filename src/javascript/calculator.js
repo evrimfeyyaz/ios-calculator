@@ -82,13 +82,37 @@
     setOperator(newOperator);
   };
 
+  exports.percentage = function() {
+    if (hasPendingPriorityOperation()) {
+      if (thirdOperand === null) thirdOperand = secondOperand;
+
+      thirdOperand = secondOperand * (thirdOperand / 100);
+
+      return;
+    }
+
+    if (firstOperand !== null && currentOperator !== null) {
+      if (secondOperand === null) secondOperand = firstOperand;
+
+      secondOperand = firstOperand * (secondOperand / 100);
+
+      return;
+    }
+
+    firstOperand /= 100;
+  };
+
   exports.calculate = function() {
     if (firstOperand === null) {
       return 0;
     }
 
+
+
     if (currentOperator === null || secondOperand === null) {
-      firstOperand = getOperationResult(firstOperand, lastOperand, lastOperation);
+      if (lastOperand !== null && lastOperation !== null) {
+        firstOperand = getOperationResult(firstOperand, lastOperand, lastOperation);
+      }
 
       return firstOperand;
     }
@@ -174,6 +198,7 @@
     currentOperator = null;
   }
 
+  // TODO: Rename to something like "expectingNumberInput".
   function isOperatorAlreadySet() {
     return operatorIsSet && currentOperator !== null;
   }

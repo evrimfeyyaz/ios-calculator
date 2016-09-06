@@ -253,6 +253,77 @@
       assert.equal(result, 0);
     });
 
+    it("calculates the percentage of the last operand when asked after putting both operands", function() {
+      calculator.inputOperand(12);
+      calculator.operation(ADDITION);
+      calculator.inputOperand(50);
+      calculator.percentage();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 18);
+    });
+
+    it("calculates the percentage of the first operand when asked after only putting the first operand and operator", function() {
+      calculator.inputOperand(10);
+      calculator.operation(ADDITION);
+      calculator.percentage();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 11);
+    });
+
+    it("outputs 0 when the percentage is asked without inputting any operand or operator and asking for the result", function() {
+      calculator.percentage();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 0);
+    });
+
+    it("calculates the percentage of the second operand when asked for the percentage with a third operand and a priority operator", function() {
+      calculator.inputOperand(5);
+      calculator.operation(ADDITION);
+      calculator.inputOperand(6);
+      calculator.operation(MULTIPLICATION);
+      calculator.inputOperand(50);
+      calculator.percentage();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 23);
+    });
+
+    it("uses the second operand as the third operand too when asked for the percentage with a priority operation, but no third operand", function() {
+      calculator.inputOperand(5);
+      calculator.operation(ADDITION);
+      calculator.inputOperand(10);
+      calculator.operation(MULTIPLICATION);
+      calculator.percentage();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 15);
+    });
+
+    it("turns the number to a percentage when there is no operation set", function() {
+      calculator.inputOperand(200);
+      calculator.percentage();
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 2);
+    });
+
+    it("returns the number itself when only one operand and no operation is input", function() {
+      calculator.inputOperand(10);
+
+      var result = calculator.calculate();
+
+      assert.equal(result, 10);
+    });
+
     it("pushes a result notification when an intermediate result is calculated when a priority operation is set");
 
     it("pushes a notification when an intermediate or end result is calculated");
