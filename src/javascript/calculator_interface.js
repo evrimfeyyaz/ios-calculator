@@ -5,7 +5,13 @@
 (function () {
   "use strict";
 
-  exports.initialize = function(container) {
-    container.innerHTML = "Hello world!";
+  exports.initialize = function(options) {
+    options.numbers.forEach(function(number) {
+      number.addEventListener("click", function() {
+        var numberValue = this.dataset.value;
+
+        options.output.innerHTML += numberValue;
+      });
+    });
   };
 }());
