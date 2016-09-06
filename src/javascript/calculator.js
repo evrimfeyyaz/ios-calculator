@@ -9,7 +9,7 @@
   var secondOperand     = null;
   var currentOperator   = null;
 
-  var lastOperand   = null;
+  var lastOperand    = null;
   var lastOperation  = null;
 
   var operatorIsSet  = true;
@@ -106,8 +106,6 @@
     if (firstOperand === null) {
       return 0;
     }
-
-
 
     if (currentOperator === null || secondOperand === null) {
       if (lastOperand !== null && lastOperation !== null) {

@@ -328,6 +328,6 @@
 
     it("pushes a notification when an intermediate or end result is calculated");
 
-    it("doesn't push a result notification when a priority operation is set, but there is no intermediate result");
+    it("doesn't push a result notification when a priority operation is set, and there is no intermediate result");
   });
 }());
