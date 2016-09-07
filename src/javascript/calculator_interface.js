@@ -5,13 +5,34 @@
 (function () {
   "use strict";
 
-  exports.initialize = function(options) {
-    options.numbers.forEach(function(number) {
-      number.addEventListener("click", function() {
-        var numberValue = this.dataset.value;
+  var opts, currentValue;
 
-        options.output.innerHTML += numberValue;
-      });
+  exports.initialize = function(options) {
+    resetValues();
+
+    opts = options;
+
+    opts.numbers.forEach(function(number) {
+      number.addEventListener("click", numberClickHandler);
     });
+
+    displayCurrentValue();
   };
+
+  function numberClickHandler(e) {
+    var numberButton  = e.currentTarget;
+    var numberValue   = +numberButton.dataset.value;
+
+    currentValue = (currentValue * 10) + numberValue;
+    displayCurrentValue();
+  }
+
+  function resetValues() {
+    opts = {};
+    currentValue = 0;
+  }
+
+  function displayCurrentValue() {
+    opts.output.innerHTML = currentValue;
+  }
 }());

@@ -9,8 +9,9 @@
 
   describe("Calculator interface", function() {
     var container,
-      output,
-      numbers = [];
+        output,
+        numbers = []
+      ;
 
     beforeEach(function() {
       container = document.createElement("div");
@@ -21,7 +22,12 @@
     });
 
     afterEach(function() {
+
       removeElement(container);
+    });
+
+    it("displays '0' when first started", function() {
+      assert.equal(displayedNumber(), "0");
     });
 
     it("can display pressed numbers", function() {
@@ -30,9 +36,14 @@
       }
       numbers[0].click();
 
-      var result = output.innerHTML;
+      assert.equal(displayedNumber(), "1234567890");
+    });
 
-      assert.equal(result, "1234567890");
+    it("doesn't display a '0' in front of numbers, even if it's pressed", function() {
+      numbers[0].click();
+      numbers[1].click();
+
+      assert.equal(displayedNumber(), "1");
     });
 
     // Helper functions
@@ -62,6 +73,10 @@
 
     function removeElement(element) {
       element.parentNode.removeChild(element);
+    }
+
+    function displayedNumber() {
+      return output.innerHTML;
     }
   });
 }());
