@@ -17,6 +17,8 @@
   var priorityOperator  = null;
   var thirdOperand      = null;
 
+  var opts, currentValue;
+
   exports.OperationsEnum = {
     ADDITION: 0,
     SUBTRACTION: 1,
@@ -28,6 +30,78 @@
   var SUBTRACTION     = exports.OperationsEnum.SUBTRACTION;
   var MULTIPLICATION  = exports.OperationsEnum.MULTIPLICATION;
   var DIVISION        = exports.OperationsEnum.DIVISION;
+
+  exports.initialize = function(options) {
+    resetValues();
+
+    opts = options;
+
+    opts.numberButtons.forEach(function(numberButton) {
+      numberButton.addEventListener("click", numberButtonClickHandler);
+    });
+
+    opts.addButton.addEventListener("click", addButtonClickHandler);
+    opts.subtractButton.addEventListener("click", subtractButtonClickHandler);
+    opts.multiplyButton.addEventListener("click", multiplyButtonClickHandler);
+    opts.divideButton.addEventListener("click", divideButtonClickHandler);
+
+    opts.equalsButton.addEventListener("click", equalsButtonClickHandler);
+
+    displayCurrentValue();
+  };
+
+  exports.terminate = function() {
+    resetValues();
+  };
+
+  function numberButtonClickHandler(e) {
+    var numberButton  = e.currentTarget;
+    var numberValue   = +numberButton.dataset.value;
+
+    currentValue = (currentValue * 10) + numberValue;
+    displayCurrentValue();
+  }
+
+  function addButtonClickHandler() {
+    operationButtonClick(ADDITION);
+  }
+
+  function subtractButtonClickHandler() {
+    operationButtonClick(SUBTRACTION);
+  }
+
+  function multiplyButtonClickHandler() {
+    operationButtonClick(MULTIPLICATION);
+  }
+
+  function divideButtonClickHandler() {
+    operationButtonClick(DIVISION);
+  }
+
+  function equalsButtonClickHandler() {
+    exports.inputOperand(currentValue);
+    currentValue = exports.calculate();
+
+    displayCurrentValue();
+  }
+
+  function operationButtonClick(operation) {
+    exports.inputOperand(currentValue);
+    exports.operation(operation);
+
+    currentValue = 0;
+  }
+
+  function resetValues() {
+    opts = {};
+    currentValue = 0;
+
+    exports.allClear();
+  }
+
+  function displayCurrentValue() {
+    opts.displayPanel.innerHTML = currentValue;
+  }
 
   // TODO: Find a better name.
   exports.inputOperand = function(number) {
