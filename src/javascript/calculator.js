@@ -102,6 +102,7 @@
     firstOperand /= 100;
   };
 
+  // TODO: Rename to "getResult".
   exports.calculate = function() {
     if (firstOperand === null) {
       return 0;
@@ -131,8 +132,8 @@
     secondOperand     = null;
     currentOperator   = null;
 
-    lastOperand   = null;
-    lastOperation  = null;
+    lastOperand     = null;
+    lastOperation   = null;
 
     operatorIsSet  = true;
 

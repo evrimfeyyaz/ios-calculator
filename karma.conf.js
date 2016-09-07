@@ -41,7 +41,7 @@ module.exports = function(config) {
     port: 9876,
 
 
-    // enable / disable colors in the output (reporters and logs)
+    // enable / disable colors in the displayPanel (reporters and logs)
     colors: true,
 
 
