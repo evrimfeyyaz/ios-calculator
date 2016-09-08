@@ -231,64 +231,64 @@
       assertDisplayedNumberString("13");
     });
 
-    xit("repeats the last operation when repeatedly asked for the calculated result (e.g. 5,*,2,=,= is '5*2*2')", function() {
-      calculator.inputOperand(5);
-      calculator.operation(MULTIPLICATION);
-      calculator.inputOperand(2);
-      calculator.calculate();
+    it("repeats the last operation when repeatedly asked for the calculated result (e.g. 5,*,2,=,= is '5*2*2')", function() {
+      pressNumber(5);
+      pressMultiply();
+      pressNumber(2);
 
-      var result = calculator.calculate();
+      pressEquals();
+      pressEquals();
 
-      assert.equal(result, 20);
+      assertDisplayedNumberString("20");
     });
 
-    xit("repeats the last priority operation when repeatedly asked for the calculated result (e.g. 5,+,6,*,5,=,= is '(5+(6*5))*5", function() {
-      calculator.inputOperand(5);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(6);
-      calculator.operation(MULTIPLICATION);
-      calculator.inputOperand(5);
-      calculator.calculate();
+    it("repeats the last priority operation when repeatedly asked for the calculated result (e.g. 5,+,6,*,5,=,= is '(5+(6*5))*5", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(6);
+      pressMultiply();
+      pressNumber(5);
 
-      var result = calculator.calculate();
+      pressEquals();
+      pressEquals();
 
-      assert.equal(result, 175);
+      assertDisplayedNumberString("175");
     });
 
-    xit("doesn't create a priority operation if the result was already calculated (e.g. 5,+,6,*,5,=,*,2,= is '(5+(6*5))*2", function() {
-      calculator.inputOperand(5);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(6);
-      calculator.operation(MULTIPLICATION);
-      calculator.inputOperand(5);
-      calculator.calculate();
-      calculator.operation(MULTIPLICATION);
-      calculator.inputOperand(2);
+    it("doesn't create a priority operation if the result was already calculated (e.g. 5,+,6,*,5,=,*,2,= is '(5+(6*5))*2", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(6);
+      pressMultiply();
+      pressNumber(5);
+      pressEquals();
+      pressMultiply();
+      pressNumber(2);
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 70);
+      assertDisplayedNumberString("70");
     });
 
-    xit("repeats the operation on the same number when repeatedly set the same operation (e.g. 5,*,=,= is '5*5*5", function() {
-      calculator.inputOperand(5);
-      calculator.operation(MULTIPLICATION);
-      calculator.calculate();
+    it("repeats the operation on the same number when repeatedly set the same operation (e.g. 5,*,=,= is '5*5*5", function() {
+      pressNumber(5);
+      pressMultiply();
 
-      var result = calculator.calculate();
+      pressEquals();
+      pressEquals();
 
-      assert.equal(result, 125);
+      assertDisplayedNumberString("125");
     });
 
-    xit("uses 0 as the first operand if it isn't set", function() {
-      calculator.operation(MULTIPLICATION);
-      calculator.inputOperand(5);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(2);
+    it("uses 0 as the first operand if it isn't set", function() {
+      pressMultiply();
+      pressNumber(5);
+      pressAdd();
+      pressNumber(2);
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 2);
+      assertDisplayedNumberString("2");
     });
 
     xit("clears last operand and operation memory when asked to 'all clear'", function() {

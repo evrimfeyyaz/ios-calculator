@@ -83,10 +83,12 @@
   }
 
   function equalsButtonClickHandler() {
-    exports.inputOperand(currentValue);
+    if (currentValue !== null) exports.inputOperand(currentValue);
     currentValue = exports.calculate();
 
     displayCurrentValue();
+
+    currentValue = null;
   }
 
   function operationButtonClick(operation) {
