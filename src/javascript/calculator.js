@@ -17,7 +17,8 @@
   var priorityOperator  = null;
   var thirdOperand      = null;
 
-  var opts, currentValue;
+  var opts;
+  var currentValue  = null;
 
   exports.OperationsEnum = {
     ADDITION: 0,
@@ -26,6 +27,7 @@
     DIVISION: 3
   };
 
+  // TODO: Convert these to regular constants.
   var ADDITION        = exports.OperationsEnum.ADDITION;
   var SUBTRACTION     = exports.OperationsEnum.SUBTRACTION;
   var MULTIPLICATION  = exports.OperationsEnum.MULTIPLICATION;
@@ -58,6 +60,8 @@
     var numberButton  = e.currentTarget;
     var numberValue   = +numberButton.dataset.value;
 
+    if (currentValue === null) currentValue = 0;
+
     currentValue = (currentValue * 10) + numberValue;
     displayCurrentValue();
   }
@@ -86,21 +90,21 @@
   }
 
   function operationButtonClick(operation) {
-    exports.inputOperand(currentValue);
+    if (currentValue !== null) exports.inputOperand(currentValue);
     exports.operation(operation);
 
-    currentValue = 0;
+    currentValue = null;
   }
 
   function resetValues() {
     opts = {};
-    currentValue = 0;
+    currentValue = null;
 
     exports.allClear();
   }
 
   function displayCurrentValue() {
-    opts.displayPanel.innerHTML = currentValue;
+    opts.displayPanel.innerHTML = (currentValue === null ? 0 : currentValue);
   }
 
   // TODO: Find a better name.

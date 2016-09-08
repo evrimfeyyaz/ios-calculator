@@ -9,9 +9,7 @@
 
   describe("Calculator", function() {
     var ADDITION = calculator.OperationsEnum.ADDITION;
-    var SUBTRACTION = calculator.OperationsEnum.SUBTRACTION;
     var MULTIPLICATION = calculator.OperationsEnum.MULTIPLICATION;
-    var DIVISION = calculator.OperationsEnum.DIVISION;
 
     var container;
     var displayPanel;
@@ -175,58 +173,62 @@
       assertDisplayedNumberString("30");
     });
 
-    xit("can change a non-priority operation to another non-priority operation when it is already set", function() {
-      calculator.inputOperand(10);
-      calculator.operation(ADDITION);
-      calculator.operation(SUBTRACTION);
-      calculator.inputOperand(2);
-      calculator.operation(SUBTRACTION);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(5);
+    it("can change a non-priority operation to another non-priority operation when it is already set", function() {
+      pressNumber(1);
+      pressNumber(0);
+      pressAdd();
+      pressSubtract();
+      pressNumber(2);
+      pressSubtract();
+      pressAdd();
+      pressNumber(5);
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 13);
+      assertDisplayedNumberString("13");
     });
 
-    xit("can change a non-priority operation to a priority operation when it is already set", function() {
-      calculator.inputOperand(10);
-      calculator.operation(ADDITION);
-      calculator.operation(MULTIPLICATION);
-      calculator.inputOperand(2);
-      calculator.operation(ADDITION);
-      calculator.operation(DIVISION);
-      calculator.inputOperand(5);
+    it("can change a non-priority operation to a priority operation when it is already set", function() {
+      pressNumber(1);
+      pressNumber(0);
+      pressAdd();
+      pressMultiply();
+      pressNumber(2);
+      pressAdd();
+      pressDivide();
+      pressNumber(5);
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 4);
+      assertDisplayedNumberString("4");
     });
 
-    xit("can change a priority operation to non-priority operation when it is already set", function() {
-      calculator.inputOperand(8);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(5);
-      calculator.operation(MULTIPLICATION);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(10);
+    it("can change a priority operation to non-priority operation when it is already set", function() {
+      pressNumber(8);
+      pressAdd();
+      pressNumber(5);
+      pressMultiply();
+      pressAdd();
+      pressNumber(1);
+      pressNumber(0);
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 23);
+      assertDisplayedNumberString("23");
     });
 
-    xit("can change a priority operation to another priority operation when it is already set", function() {
-      calculator.inputOperand(8);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(10);
-      calculator.operation(MULTIPLICATION);
-      calculator.operation(DIVISION);
-      calculator.inputOperand(2);
+    it("can change a priority operation to another priority operation when it is already set", function() {
+      pressNumber(8);
+      pressAdd();
+      pressNumber(1);
+      pressNumber(0);
+      pressMultiply();
+      pressDivide();
+      pressNumber(2);
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 13);
+      assertDisplayedNumberString("13");
     });
 
     xit("repeats the last operation when repeatedly asked for the calculated result (e.g. 5,*,2,=,= is '5*2*2')", function() {
