@@ -8,9 +8,6 @@
   var calculator = require("./calculator.js");
 
   describe("Calculator", function() {
-    var ADDITION = calculator.OperationsEnum.ADDITION;
-    var MULTIPLICATION = calculator.OperationsEnum.MULTIPLICATION;
-
     var container;
     var displayPanel;
     var numberButtons = [];
@@ -18,7 +15,9 @@
     var subtractButton;
     var multiplyButton;
     var divideButton;
+    var percentButton;
     var equalsButton;
+    var allClearButton;
 
     beforeEach(function() {
       container = document.createElement("div");
@@ -291,87 +290,96 @@
       assertDisplayedNumberString("2");
     });
 
-    xit("clears last operand and operation memory when asked to 'all clear'", function() {
-      calculator.inputOperand(5);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(10);
-      calculator.calculate();
-      calculator.allClear();
+    it("clears last operand and operation memory when asked to 'all clear'", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(1);
+      pressNumber(0);
+      pressEquals();
+      pressAllClear();
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 0);
+      assertDisplayedNumberString("0");
     });
 
-    xit("calculates the percentage of the last operand when asked after putting both operands", function() {
-      calculator.inputOperand(12);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(50);
-      calculator.percentage();
+    it("calculates the percentage of the last operand when asked after putting both operands", function() {
+      pressNumber(1);
+      pressNumber(2);
+      pressAdd();
+      pressNumber(5);
+      pressNumber(0);
+      pressPercent();
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 18);
+      assertDisplayedNumberString("18");
     });
 
-    xit("calculates the percentage of the first operand when asked after only putting the first operand and operator", function() {
-      calculator.inputOperand(10);
-      calculator.operation(ADDITION);
-      calculator.percentage();
+    it("calculates the percentage of the first operand when asked after only putting the first operand and operator", function() {
+      pressNumber(1);
+      pressNumber(0);
+      pressAdd();
+      pressPercent();
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 11);
+      assertDisplayedNumberString("11");
     });
 
-    xit("outputs 0 when the percentage is asked without inputting any operand or operator and asking for the result", function() {
-      calculator.percentage();
+    it("outputs 0 when the percentage is asked without inputting any operand or operator and asking for the result", function() {
+      pressPercent();
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 0);
+      assertDisplayedNumberString("0");
     });
 
-    xit("calculates the percentage of the second operand when asked for the percentage with a third operand and a priority operator", function() {
-      calculator.inputOperand(5);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(6);
-      calculator.operation(MULTIPLICATION);
-      calculator.inputOperand(50);
-      calculator.percentage();
+    it("calculates the percentage of the second operand when asked for the percentage with a third operand and a priority operator", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(6);
+      pressMultiply();
+      pressNumber(5);
+      pressNumber(0);
+      pressPercent();
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 23);
+      assertDisplayedNumberString("23");
     });
 
-    xit("uses the second operand as the third operand too when asked for the percentage with a priority operation, but no third operand", function() {
-      calculator.inputOperand(5);
-      calculator.operation(ADDITION);
-      calculator.inputOperand(10);
-      calculator.operation(MULTIPLICATION);
-      calculator.percentage();
+    it("uses the second operand as the third operand too when asked for the percentage with a priority operation, but no third operand", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(1);
+      pressNumber(0);
+      pressMultiply();
+      pressPercent();
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 15);
+      assertDisplayedNumberString("15");
     });
 
-    xit("turns the number to a percentage when there is no operation set", function() {
-      calculator.inputOperand(200);
-      calculator.percentage();
+    it("turns the number to a percentage when there is no operation set", function() {
+      pressNumber(2);
+      pressNumber(0);
+      pressNumber(0);
+      pressPercent();
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 2);
+      assertDisplayedNumberString("2");
     });
 
-    xit("returns the number itself when only one operand and no operation is input", function() {
-      calculator.inputOperand(10);
+    it("returns the number itself when only one operand and no operation is input", function() {
+      pressNumber(1);
+      pressNumber(0);
 
-      var result = calculator.calculate();
+      pressEquals();
 
-      assert.equal(result, 10);
+      assertDisplayedNumberString("10");
     });
 
     xit("pushes a result notification when an intermediate result is calculated when a priority operation is set");
@@ -395,7 +403,10 @@
       multiplyButton  = createElementInContainer("button");
       divideButton    = createElementInContainer("button");
 
-      equalsButton = createElementInContainer("button");
+      percentButton   = createElementInContainer("button");
+
+      equalsButton    = createElementInContainer("button");
+      allClearButton  = createElementInContainer("button");
     }
 
     function initializeCalculator() {
@@ -406,7 +417,9 @@
         subtractButton: subtractButton,
         multiplyButton: multiplyButton,
         divideButton: divideButton,
-        equalsButton: equalsButton
+        percentButton: percentButton,
+        equalsButton: equalsButton,
+        allClearButton: allClearButton
       });
     }
 
@@ -445,8 +458,16 @@
       divideButton.click();
     }
 
+    function pressPercent() {
+      percentButton.click();
+    }
+
     function pressEquals() {
       equalsButton.click();
+    }
+
+    function pressAllClear() {
+      allClearButton.click();
     }
 
     function assertDisplayedNumberString(numberString) {

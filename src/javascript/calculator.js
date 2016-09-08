@@ -47,7 +47,10 @@
     opts.multiplyButton.addEventListener("click", multiplyButtonClickHandler);
     opts.divideButton.addEventListener("click", divideButtonClickHandler);
 
+    opts.percentButton.addEventListener("click", percentButtonClickHandler);
+
     opts.equalsButton.addEventListener("click", equalsButtonClickHandler);
+    opts.allClearButton.addEventListener("click", allClearButtonClickHandler);
 
     displayCurrentValue();
   };
@@ -82,6 +85,13 @@
     operationButtonClick(DIVISION);
   }
 
+  function percentButtonClickHandler() {
+    if (currentValue !== null) exports.inputOperand(currentValue);
+    exports.percentage();
+
+    currentValue = null;
+  }
+
   function equalsButtonClickHandler() {
     if (currentValue !== null) exports.inputOperand(currentValue);
     currentValue = exports.calculate();
@@ -89,6 +99,14 @@
     displayCurrentValue();
 
     currentValue = null;
+  }
+
+  function allClearButtonClickHandler() {
+    exports.allClear();
+
+    currentValue = null;
+
+    displayCurrentValue();
   }
 
   function operationButtonClick(operation) {
