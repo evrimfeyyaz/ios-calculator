@@ -53,10 +53,6 @@
       assertDisplayedNumberString("1");
     });
 
-    it("can change operators even after the user has already set one");
-
-    it("can repeat the last operation when clicked on equals after the first time");
-
     it("can add two numbers", function() {
       pressNumber(5);
       pressAdd();
