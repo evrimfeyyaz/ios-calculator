@@ -86,15 +86,15 @@
   }
 
   function percentButtonClickHandler() {
-    if (currentValue !== null) exports.inputOperand(currentValue);
-    exports.percentage();
+    if (currentValue !== null) inputOperand(currentValue);
+    percentage();
 
     currentValue = null;
   }
 
   function equalsButtonClickHandler() {
-    if (currentValue !== null) exports.inputOperand(currentValue);
-    currentValue = exports.calculate();
+    if (currentValue !== null) inputOperand(currentValue);
+    currentValue = getResult();
 
     displayCurrentValue();
 
@@ -102,7 +102,7 @@
   }
 
   function allClearButtonClickHandler() {
-    exports.allClear();
+    allClear();
 
     currentValue = null;
 
@@ -110,8 +110,8 @@
   }
 
   function operationButtonClick(operation) {
-    if (currentValue !== null) exports.inputOperand(currentValue);
-    exports.operation(operation);
+    if (currentValue !== null) inputOperand(currentValue);
+    setOperation(operation);
 
     currentValue = null;
   }
@@ -120,7 +120,7 @@
     opts = {};
     currentValue = null;
 
-    exports.allClear();
+    allClear();
   }
 
   function displayCurrentValue() {
@@ -128,7 +128,7 @@
   }
 
   // TODO: Find a better name.
-  exports.inputOperand = function(number) {
+  function inputOperand(number) {
     if (priorityOperator !== null) {
       thirdOperand = number;
     } else if (currentOperator === null) {
@@ -140,9 +140,9 @@
     lastOperand = number;
 
     operatorIsSet = false;
-  };
+  }
 
-  exports.operation = function(newOperator) {
+  function setOperation(newOperator) {
     if (firstOperand === null) {
       firstOperand = 0;
     }
@@ -157,7 +157,7 @@
       if (hasPendingPriorityOperation() && !isNewOperatorPriority(newOperator)) {
         removePriorityOperator();
 
-        exports.calculate();
+        getResult();
       }
 
       setOperator(newOperator);
@@ -174,13 +174,13 @@
     }
 
     if (hasPendingOperation()) {
-      exports.calculate();
+      getResult();
     }
 
     setOperator(newOperator);
-  };
+  }
 
-  exports.percentage = function() {
+  function percentage() {
     if (hasPendingPriorityOperation()) {
       if (thirdOperand === null) thirdOperand = secondOperand;
 
@@ -198,10 +198,9 @@
     }
 
     firstOperand /= 100;
-  };
+  }
 
-  // TODO: Rename to "getResult".
-  exports.calculate = function() {
+  function getResult() {
     if (firstOperand === null) {
       return 0;
     }
@@ -223,9 +222,9 @@
     removeOperator();
 
     return firstOperand;
-  };
+  }
 
-  exports.allClear = function() {
+  function allClear() {
     firstOperand      = null;
     secondOperand     = null;
     currentOperator   = null;
@@ -237,7 +236,7 @@
 
     priorityOperator  = null;
     thirdOperand      = null;
-  };
+  }
 
   function getOperationResult(firstOperand, secondOperand, operator) {
     switch (operator) {
