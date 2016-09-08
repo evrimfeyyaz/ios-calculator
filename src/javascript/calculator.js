@@ -8,6 +8,7 @@
   var firstOperand      = null;
   var secondOperand     = null;
   var currentOperator   = null;
+  var decimalPoints     = null;
 
   var lastOperand    = null;
   var lastOperation  = null;
@@ -48,6 +49,7 @@
     opts.divideButton.addEventListener("click", divideButtonClickHandler);
 
     opts.percentButton.addEventListener("click", percentButtonClickHandler);
+    opts.decimalButton.addEventListener("click", decimalButtonClickHandler);
 
     opts.equalsButton.addEventListener("click", equalsButtonClickHandler);
     opts.allClearButton.addEventListener("click", allClearButtonClickHandler);
@@ -65,7 +67,13 @@
 
     if (currentValue === null) currentValue = 0;
 
-    currentValue = (currentValue * 10) + numberValue;
+    if (decimalPoints === null) {
+      currentValue = (currentValue * 10) + numberValue;
+    } else {
+      currentValue = currentValue + (numberValue / Math.pow(10, decimalPoints));
+      decimalPoints++;
+    }
+
     displayCurrentValue();
   }
 
@@ -92,6 +100,17 @@
     currentValue = null;
   }
 
+  function decimalButtonClickHandler() {
+    if (decimalPoints === null) {
+      decimalPoints = 1;
+
+      var value = currentValue === null ? 0 : currentValue;
+      value += ".";
+
+      displayValue(value);
+    }
+  }
+
   function equalsButtonClickHandler() {
     if (currentValue !== null) inputOperand(currentValue);
     currentValue = getResult();
@@ -99,6 +118,7 @@
     displayCurrentValue();
 
     currentValue = null;
+    decimalPoints = null;
   }
 
   function allClearButtonClickHandler() {
@@ -114,6 +134,7 @@
     setOperation(operation);
 
     currentValue = null;
+    decimalPoints = null;
   }
 
   function resetValues() {
@@ -124,7 +145,13 @@
   }
 
   function displayCurrentValue() {
-    opts.displayPanel.innerHTML = (currentValue === null ? 0 : currentValue);
+    var value = currentValue === null ? 0 : currentValue;
+
+    displayValue(value);
+  }
+
+  function displayValue(valueString) {
+    opts.displayPanel.innerHTML = valueString;
   }
 
   // TODO: Find a better name.
@@ -228,6 +255,7 @@
     firstOperand      = null;
     secondOperand     = null;
     currentOperator   = null;
+    decimalPoints     = null;
 
     lastOperand     = null;
     lastOperation   = null;
