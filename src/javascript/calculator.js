@@ -50,6 +50,7 @@
 
     opts.percentButton.addEventListener("click", percentButtonClickHandler);
     opts.decimalButton.addEventListener("click", decimalButtonClickHandler);
+    opts.changeSignButton.addEventListener("click", changeSignButtonClickHandler);
 
     opts.equalsButton.addEventListener("click", equalsButtonClickHandler);
     opts.allClearButton.addEventListener("click", allClearButtonClickHandler);
@@ -111,14 +112,24 @@
     }
   }
 
+  function changeSignButtonClickHandler() {
+    if (currentValue !== null) {
+      currentValue = -currentValue;
+    } else {
+      firstOperand = -firstOperand;
+    }
+
+    displayCurrentValue();
+  }
+
   function equalsButtonClickHandler() {
     if (currentValue !== null) inputOperand(currentValue);
     currentValue = getResult();
 
-    displayCurrentValue();
-
     currentValue = null;
     decimalPoints = null;
+
+    displayCurrentValue();
   }
 
   function allClearButtonClickHandler() {
@@ -145,7 +156,13 @@
   }
 
   function displayCurrentValue() {
-    var value = currentValue === null ? 0 : currentValue;
+    var value = 0;
+
+    if (currentValue !== null) {
+      value = currentValue;
+    } else if (firstOperand !== null) {
+      value = firstOperand;
+    }
 
     displayValue(value);
   }

@@ -17,6 +17,7 @@
     var divideButton;
     var percentButton;
     var decimalButton;
+    var changeSignButton;
     var equalsButton;
     var allClearButton;
 
@@ -398,7 +399,7 @@
       assertDisplayedNumberString("0.");
     });
 
-    it("ignores the decimal point, if the user doesn't add any decimal places", function() {
+    it("ignores the decimal point if the user doesn't add any decimal places", function() {
       pressNumber(5);
       pressDecimal();
       pressAdd();
@@ -418,13 +419,36 @@
       assertDisplayedNumberString("1.2");
     });
 
+    it("changes the sign of the currently input number when the user presses the change sign button", function() {
+      pressNumber(5);
+      pressChangeSign();
+      pressAdd();
+      pressNumber(6);
+
+      pressEquals();
+
+      assertDisplayedNumberString("1");
+    });
+
+    it("changes the sign of the result when the user presses the change sign button", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(6);
+      pressEquals();
+      pressChangeSign();
+      pressAdd();
+      pressNumber(6);
+
+      pressEquals();
+
+      assertDisplayedNumberString("-5");
+    });
+
     xit("pushes a result notification when an intermediate result is calculated when a priority operation is set");
 
     xit("pushes a notification when an intermediate or end result is calculated");
 
     xit("doesn't push a result notification when a priority operation is set, and there is no intermediate result");
-
-    // TODO: Add tests for the change sign button.
 
     // TODO: Add tests for the clear button.
 
@@ -447,8 +471,9 @@
       multiplyButton  = createElementInContainer("button");
       divideButton    = createElementInContainer("button");
 
-      percentButton   = createElementInContainer("button");
-      decimalButton   = createElementInContainer("button");
+      percentButton     = createElementInContainer("button");
+      decimalButton     = createElementInContainer("button");
+      changeSignButton  = createElementInContainer("button");
 
       equalsButton    = createElementInContainer("button");
       allClearButton  = createElementInContainer("button");
@@ -464,6 +489,7 @@
         divideButton: divideButton,
         percentButton: percentButton,
         decimalButton: decimalButton,
+        changeSignButton: changeSignButton,
         equalsButton: equalsButton,
         allClearButton: allClearButton
       });
@@ -510,6 +536,10 @@
 
     function pressDecimal() {
       decimalButton.click();
+    }
+
+    function pressChangeSign() {
+      changeSignButton.click();
     }
 
     function pressEquals() {
