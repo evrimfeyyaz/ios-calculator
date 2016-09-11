@@ -176,6 +176,7 @@
   }
 
   function displayValue(valueString) {
+    // TODO: Use a notification to update the result instead of doing it in the code with the innerHTML method.
     opts.displayPanel.innerHTML = valueString;
   }
 
@@ -300,17 +301,28 @@
     return opts.clearButton.dataset.currentFunctionality;
   }
 
+  // TODO: Try notifying the interface of the result calculation here.
   function getOperationResult(firstOperand, secondOperand, operator) {
+    var result;
+
     switch (operator) {
       case ADDITION:
-        return firstOperand + secondOperand;
+        result = firstOperand + secondOperand;
+        break;
       case SUBTRACTION:
-        return firstOperand - secondOperand;
+        result = firstOperand - secondOperand;
+        break;
       case MULTIPLICATION:
-        return firstOperand * secondOperand;
+        result = firstOperand * secondOperand;
+        break;
       case DIVISION:
-        return firstOperand / secondOperand;
+        result = firstOperand / secondOperand;
+        break;
     }
+
+    displayValue(result);
+
+    return result;
   }
 
   function calculatePendingPriorityOperation() {

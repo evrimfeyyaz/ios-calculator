@@ -517,11 +517,41 @@
       assertDisplayedNumberString("4");
     });
 
-    xit("pushes a result notification when an intermediate result is calculated when a priority operation is set");
+    it("shows the last operand when the user inputs an operation", function() {
+      pressNumber(5);
+      pressAdd();
 
-    xit("pushes a notification when an intermediate or end result is calculated");
+      assertDisplayedNumberString("5");
+    });
 
-    xit("doesn't push a result notification when a priority operation is set, and there is no intermediate result");
+    it("shows the intermediate result when the user inputs a second operation", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(6);
+      pressAdd();
+
+      assertDisplayedNumberString("11");
+    });
+
+    it("shows the last operand when the user inputs a priority operation", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(6);
+      pressMultiply();
+
+      assertDisplayedNumberString("6");
+    });
+
+    it("shows the intermediate result of the priority operation when the user inputs a second priority operation", function() {
+      pressNumber(5);
+      pressAdd();
+      pressNumber(6);
+      pressMultiply();
+      pressNumber(5);
+      pressDivide();
+
+      assertDisplayedNumberString(30);
+    });
 
     // TODO: Add tests for showing the intermediate result.
 
