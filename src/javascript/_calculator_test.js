@@ -19,7 +19,7 @@
     var decimalButton;
     var changeSignButton;
     var equalsButton;
-    var allClearButton;
+    var clearButton;
 
     beforeEach(function() {
       container = document.createElement("div");
@@ -294,7 +294,8 @@
       pressNumber(1);
       pressNumber(0);
       pressEquals();
-      pressAllClear();
+      pressClear();
+      pressClear();
 
       pressEquals();
 
@@ -444,15 +445,87 @@
       assertDisplayedNumberString("-5");
     });
 
+    it("shows the 'all clear' button when the calculator starts", function() {
+      assertClearButtonFunctionality("AC");
+    });
+
+    it("shows the 'clear' button when the user inputs a number", function() {
+      pressNumber(5);
+
+      assertClearButtonFunctionality("C");
+    });
+
+    it("clears the current result when the user presses the clear button", function() {
+      pressNumber(1);
+      pressAdd();
+      pressNumber(5);
+      pressClear();
+
+      assertDisplayedNumberString("0");
+
+      pressNumber(6);
+      pressEquals();
+
+      assertDisplayedNumberString("7");
+    });
+
+    it("shows the 'all clear' button after the user presses the 'clear' button", function() {
+      pressNumber(5);
+      pressClear();
+
+      assertClearButtonFunctionality("AC");
+    });
+
+    it("resets the calculator when the user presses the 'all clear' button", function() {
+      pressNumber(1);
+      pressAdd();
+      pressNumber(5);
+      pressClear();
+      pressClear();
+      pressNumber(6);
+
+      pressEquals();
+
+      assertDisplayedNumberString("6");
+    });
+
+    it("clears the result when the user presses the 'clear' button after the 'equals' button, but still uses it if the user presses an operation button", function() {
+      pressNumber(1);
+      pressAdd();
+      pressNumber(5);
+      pressEquals();
+      pressClear();
+      pressAdd();
+      pressNumber(2);
+
+      pressEquals();
+
+      assertDisplayedNumberString("8");
+    });
+
+    it("clears the result when the user presses the 'clear' button after the 'equals' button, and doesn't use the result if the user inputs another number", function() {
+      pressNumber(1);
+      pressAdd();
+      pressNumber(5);
+      pressEquals();
+      pressClear();
+      pressNumber(2);
+      pressAdd();
+
+      pressEquals();
+
+      assertDisplayedNumberString("4");
+    });
+
     xit("pushes a result notification when an intermediate result is calculated when a priority operation is set");
 
     xit("pushes a notification when an intermediate or end result is calculated");
 
     xit("doesn't push a result notification when a priority operation is set, and there is no intermediate result");
 
-    // TODO: Add tests for the clear button.
-
     // TODO: Add tests for showing the intermediate result.
+
+    // TODO: Add tests for notifying the interface of the clear button functionality change.
 
     // TODO: Refactor test names.
 
@@ -475,8 +548,8 @@
       decimalButton     = createElementInContainer("button");
       changeSignButton  = createElementInContainer("button");
 
-      equalsButton    = createElementInContainer("button");
-      allClearButton  = createElementInContainer("button");
+      equalsButton        = createElementInContainer("button");
+      clearButton = createElementInContainer("button");
     }
 
     function initializeCalculator() {
@@ -491,7 +564,7 @@
         decimalButton: decimalButton,
         changeSignButton: changeSignButton,
         equalsButton: equalsButton,
-        allClearButton: allClearButton
+        clearButton: clearButton
       });
     }
 
@@ -546,12 +619,18 @@
       equalsButton.click();
     }
 
-    function pressAllClear() {
-      allClearButton.click();
+    function pressClear() {
+      clearButton.click();
     }
 
-    function assertDisplayedNumberString(numberString) {
-      assert.equal(displayedNumberString(), numberString);
+    function assertDisplayedNumberString(expectedNumberString) {
+      assert.equal(displayedNumberString(), expectedNumberString);
+    }
+
+    function assertClearButtonFunctionality(expectedFunctionality) {
+      var currentFunctionality = clearButton.dataset.currentFunctionality;
+
+      assert.equal(currentFunctionality, expectedFunctionality);
     }
   });
 }());

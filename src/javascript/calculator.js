@@ -8,7 +8,7 @@
   var firstOperand      = null;
   var secondOperand     = null;
   var currentOperator   = null;
-  var decimalPoints     = null;
+  var decimalPoints     = null; // TODO: Rename to "fractionalDigits".
 
   var lastOperand    = null;
   var lastOperation  = null;
@@ -34,6 +34,9 @@
   var MULTIPLICATION  = exports.OperationsEnum.MULTIPLICATION;
   var DIVISION        = exports.OperationsEnum.DIVISION;
 
+  var AC  = "AC";
+  var C   = "C";
+
   exports.initialize = function(options) {
     resetValues();
 
@@ -53,7 +56,9 @@
     opts.changeSignButton.addEventListener("click", changeSignButtonClickHandler);
 
     opts.equalsButton.addEventListener("click", equalsButtonClickHandler);
-    opts.allClearButton.addEventListener("click", allClearButtonClickHandler);
+    opts.clearButton.addEventListener("click", clearButtonClickHandler);
+
+    setClearButtonFunctionality(AC);
 
     displayCurrentValue();
   };
@@ -76,6 +81,8 @@
     }
 
     displayCurrentValue();
+
+    setClearButtonFunctionality(C);
   }
 
   function addButtonClickHandler() {
@@ -124,20 +131,27 @@
 
   function equalsButtonClickHandler() {
     if (currentValue !== null) inputOperand(currentValue);
-    currentValue = getResult();
+    var result = getResult();
 
     currentValue = null;
     decimalPoints = null;
 
-    displayCurrentValue();
+    displayValue(result);
   }
 
-  function allClearButtonClickHandler() {
-    allClear();
+  function clearButtonClickHandler() {
+    var currentFunctionality = getClearButtonFunctionality();
 
     currentValue = null;
+    if (currentFunctionality === AC) {
+      allClear();
 
-    displayCurrentValue();
+      displayCurrentValue();
+    } else {
+      setClearButtonFunctionality(AC);
+
+      displayValue(0);
+    }
   }
 
   function operationButtonClick(operation) {
@@ -156,13 +170,7 @@
   }
 
   function displayCurrentValue() {
-    var value = 0;
-
-    if (currentValue !== null) {
-      value = currentValue;
-    } else if (firstOperand !== null) {
-      value = firstOperand;
-    }
+    var value = currentValue === null ? 0 : currentValue;
 
     displayValue(value);
   }
@@ -264,6 +272,7 @@
     firstOperand = getOperationResult(firstOperand, secondOperand, currentOperator);
 
     removeOperator();
+    secondOperand = null;
 
     return firstOperand;
   }
@@ -281,6 +290,14 @@
 
     priorityOperator  = null;
     thirdOperand      = null;
+  }
+
+  function setClearButtonFunctionality(functionality) {
+    opts.clearButton.dataset.currentFunctionality = functionality;
+  }
+
+  function getClearButtonFunctionality() {
+    return opts.clearButton.dataset.currentFunctionality;
   }
 
   function getOperationResult(firstOperand, secondOperand, operator) {
