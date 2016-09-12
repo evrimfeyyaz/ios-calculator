@@ -562,15 +562,13 @@
       assertDisplayedNumberString("5");
     });
 
-    it.skip("changes the sign of the operand and updates the displayed value even after the user sets an operation", function() {
+    it("changes the sign of the operand and updates the displayed value even after the user has set an operation", function() {
       pressNumber(5);
       pressAdd();
       pressChangeSign();
 
       assertDisplayedNumberString("-5");
     });
-
-    // TODO: Add tests for showing the intermediate result.
 
     // TODO: Add tests for notifying the interface of the clear button functionality change.
 

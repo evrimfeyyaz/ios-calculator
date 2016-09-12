@@ -117,12 +117,12 @@
   function changeSignButtonClickHandler() {
     if (currentValue !== null) {
       currentValue = -currentValue;
+      displayCurrentValue();
     } else {
-      // TODO: Make the current value null when there is a new operand being input to get rid of this.
       firstOperand = -firstOperand;
+      displayValue(firstOperand);
     }
 
-    displayCurrentValue();
   }
 
   function equalsButtonClickHandler() {
@@ -226,8 +226,8 @@
       (newOperation === MULTIPLICATION || newOperation === DIVISION);
   }
 
-  function setOperation(newOperator) {
-    operation = newOperator;
+  function setOperation(newOperation) {
+    operation = newOperation;
     lastOperation = operation;
   }
 
