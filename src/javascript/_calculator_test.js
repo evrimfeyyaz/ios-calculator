@@ -584,17 +584,15 @@
         numberButtons[i].dataset.value = i;
       }
 
-      addButton       = createElementInContainer("button");
-      subtractButton  = createElementInContainer("button");
-      multiplyButton  = createElementInContainer("button");
-      divideButton    = createElementInContainer("button");
-
+      addButton         = createElementInContainer("button");
+      subtractButton    = createElementInContainer("button");
+      multiplyButton    = createElementInContainer("button");
+      divideButton      = createElementInContainer("button");
       percentButton     = createElementInContainer("button");
       decimalButton     = createElementInContainer("button");
       changeSignButton  = createElementInContainer("button");
-
-      equalsButton        = createElementInContainer("button");
-      clearButton = createElementInContainer("button");
+      equalsButton      = createElementInContainer("button");
+      clearButton       = createElementInContainer("button");
     }
 
     function initializeCalculator() {
