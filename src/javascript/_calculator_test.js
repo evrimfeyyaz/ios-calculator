@@ -20,10 +20,13 @@
     var changeSignButton;
     var equalsButton;
     var clearButton;
+    var displayValueUpdated;
 
     beforeEach(function() {
       container = document.createElement("div");
       document.body.appendChild(container);
+
+      displayValueUpdated = sinon.spy();
 
       createDOMElementsForCalculator();
       initializeCalculator();
@@ -36,7 +39,7 @@
     });
 
     it("displays '0' when first started", function() {
-      assertDisplayedNumberString("0");
+      assertDisplayValueUpdate("0");
     });
 
     it("can display pressed numberButtons", function() {
@@ -45,14 +48,14 @@
       }
       pressNumber(0);
 
-      assertDisplayedNumberString("1234567890");
+      assertDisplayValueUpdate("1234567890");
     });
 
     it("doesn't display a '0' in front of numbers, even if it's pressed", function() {
       pressNumber(0);
       pressNumber(1);
 
-      assertDisplayedNumberString("1");
+      assertDisplayValueUpdate("1");
     });
 
     it("can add two numbers", function() {
@@ -62,7 +65,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("8");
+      assertDisplayValueUpdate("8");
     });
 
     it("can subtract two numbers", function() {
@@ -72,7 +75,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("2");
+      assertDisplayValueUpdate("2");
     });
 
     it("can multiply two numbers", function() {
@@ -82,7 +85,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("15");
+      assertDisplayValueUpdate("15");
     });
 
     it("can divide two numbers", function() {
@@ -92,7 +95,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("2");
+      assertDisplayValueUpdate("2");
     });
 
     it("can combine additions and subtractions together", function() {
@@ -105,7 +108,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("12");
+      assertDisplayValueUpdate("12");
     });
 
     it("can combine multiplications and divisions together", function() {
@@ -118,7 +121,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("25");
+      assertDisplayValueUpdate("25");
     });
 
     it("can combine operands of multiple multiplications right after addition (e.g. '3+(5*6*2)')", function() {
@@ -132,7 +135,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("63");
+      assertDisplayValueUpdate("63");
     });
 
     it("can combine operands of multiple divisions right after subtraction (e.g. '12-(14/2/7)')", function() {
@@ -148,7 +151,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("11");
+      assertDisplayValueUpdate("11");
     });
 
     it("can combine all four operations (e.g. '3+(5*6)+2-(10/2)'", function() {
@@ -167,7 +170,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("30");
+      assertDisplayValueUpdate("30");
     });
 
     it("can change a non-priority operation to another non-priority operation when it is already set", function() {
@@ -182,7 +185,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("13");
+      assertDisplayValueUpdate("13");
     });
 
     it("can change a non-priority operation to a priority operation when it is already set", function() {
@@ -197,7 +200,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("4");
+      assertDisplayValueUpdate("4");
     });
 
     it("can change a priority operation to non-priority operation when it is already set", function() {
@@ -211,7 +214,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("23");
+      assertDisplayValueUpdate("23");
     });
 
     it("can change a priority operation to another priority operation when it is already set", function() {
@@ -225,7 +228,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("13");
+      assertDisplayValueUpdate("13");
     });
 
     it("repeats the last operation when repeatedly asked for the calculated result (e.g. 5,*,2,=,= is '5*2*2')", function() {
@@ -236,7 +239,7 @@
       pressEquals();
       pressEquals();
 
-      assertDisplayedNumberString("20");
+      assertDisplayValueUpdate("20");
     });
 
     it("repeats the last priority operation when repeatedly asked for the calculated result (e.g. 5,+,6,*,5,=,= is '(5+(6*5))*5", function() {
@@ -249,7 +252,7 @@
       pressEquals();
       pressEquals();
 
-      assertDisplayedNumberString("175");
+      assertDisplayValueUpdate("175");
     });
 
     it("doesn't create a priority operation if the result was already calculated (e.g. 5,+,6,*,5,=,*,2,= is '(5+(6*5))*2", function() {
@@ -264,7 +267,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("70");
+      assertDisplayValueUpdate("70");
     });
 
     it("repeats the operation on the same number when repeatedly set the same operation (e.g. 5,*,=,= is '5*5*5", function() {
@@ -274,7 +277,7 @@
       pressEquals();
       pressEquals();
 
-      assertDisplayedNumberString("125");
+      assertDisplayValueUpdate("125");
     });
 
     it("uses 0 as the first operand if it isn't set", function() {
@@ -285,7 +288,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("2");
+      assertDisplayValueUpdate("2");
     });
 
     it("clears last operand and operation memory when asked to 'all clear'", function() {
@@ -299,7 +302,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("0");
+      assertDisplayValueUpdate("0");
     });
 
     it("calculates the percentage of the last operand when asked after putting both operands", function() {
@@ -312,7 +315,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("18");
+      assertDisplayValueUpdate("18");
     });
 
     it("calculates the percentage of the first operand when asked after only putting the first operand and operator", function() {
@@ -323,7 +326,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("11");
+      assertDisplayValueUpdate("11");
     });
 
     it("outputs 0 when the percentage is asked without inputting any operand or operator and asking for the result", function() {
@@ -331,7 +334,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("0");
+      assertDisplayValueUpdate("0");
     });
 
     it("calculates the percentage of the second operand when asked for the percentage with a third operand and a priority operator", function() {
@@ -345,7 +348,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("23");
+      assertDisplayValueUpdate("23");
     });
 
     it("uses the second operand as the third operand too when asked for the percentage with a priority operation, but no third operand", function() {
@@ -358,7 +361,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("15");
+      assertDisplayValueUpdate("15");
     });
 
     it("turns the number to a percentage when there is no operation set", function() {
@@ -369,7 +372,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("2");
+      assertDisplayValueUpdate("2");
     });
 
     it("returns the number itself when only one operand and no operation is input", function() {
@@ -378,7 +381,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("10");
+      assertDisplayValueUpdate("10");
     });
 
     it("can create a non-integer decimal number using the dot button, and use it as an operand", function() {
@@ -391,13 +394,13 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("21");
+      assertDisplayValueUpdate("21");
     });
 
     it("shows a decimal point when the user presses the decimal button", function() {
       pressDecimal();
 
-      assertDisplayedNumberString("0.");
+      assertDisplayValueUpdate("0.");
     });
 
     it("ignores the decimal point if the user doesn't add any decimal places", function() {
@@ -408,7 +411,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("7");
+      assertDisplayValueUpdate("7");
     });
 
     it("doesn't add a second decimal point", function() {
@@ -417,7 +420,7 @@
       pressNumber(2);
       pressDecimal();
 
-      assertDisplayedNumberString("1.2");
+      assertDisplayValueUpdate("1.2");
     });
 
     it("changes the sign of the currently input number when the user presses the change sign button", function() {
@@ -428,7 +431,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("1");
+      assertDisplayValueUpdate("1");
     });
 
     it("changes the sign of the result when the user presses the change sign button", function() {
@@ -442,7 +445,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("-5");
+      assertDisplayValueUpdate("-5");
     });
 
     it("shows the 'all clear' button when the calculator starts", function() {
@@ -461,12 +464,12 @@
       pressNumber(5);
       pressClear();
 
-      assertDisplayedNumberString("0");
+      assertDisplayValueUpdate("0");
 
       pressNumber(6);
       pressEquals();
 
-      assertDisplayedNumberString("7");
+      assertDisplayValueUpdate("7");
     });
 
     it("shows the 'all clear' button after the user presses the 'clear' button", function() {
@@ -486,7 +489,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("6");
+      assertDisplayValueUpdate("6");
     });
 
     it("clears the result when the user presses the 'clear' button after the 'equals' button, but still uses it if the user presses an operation button", function() {
@@ -500,7 +503,7 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("8");
+      assertDisplayValueUpdate("8");
     });
 
     it("clears the result when the user presses the 'clear' button after the 'equals' button, and doesn't use the result if the user inputs another number", function() {
@@ -514,14 +517,14 @@
 
       pressEquals();
 
-      assertDisplayedNumberString("4");
+      assertDisplayValueUpdate("4");
     });
 
     it("shows the last operand when the user inputs an operation", function() {
       pressNumber(5);
       pressAdd();
 
-      assertDisplayedNumberString("5");
+      assertDisplayValueUpdate("5");
     });
 
     it("shows the intermediate result when the user inputs a second operation", function() {
@@ -530,7 +533,7 @@
       pressNumber(6);
       pressAdd();
 
-      assertDisplayedNumberString("11");
+      assertDisplayValueUpdate("11");
     });
 
     it("shows the last operand when the user inputs a priority operation", function() {
@@ -539,7 +542,7 @@
       pressNumber(6);
       pressMultiply();
 
-      assertDisplayedNumberString("6");
+      assertDisplayValueUpdate("6");
     });
 
     it("shows the intermediate result of the priority operation when the user inputs a second priority operation", function() {
@@ -550,7 +553,7 @@
       pressNumber(5);
       pressDivide();
 
-      assertDisplayedNumberString(30);
+      assertDisplayValueUpdate(30);
     });
 
     it("doesn't keep adding fractional digits after the user presses the clear button", function() {
@@ -559,7 +562,7 @@
       pressClear();
       pressNumber(5);
 
-      assertDisplayedNumberString("5");
+      assertDisplayValueUpdate("5");
     });
 
     it("changes the sign of the operand and updates the displayed value even after the user has set an operation", function() {
@@ -567,7 +570,7 @@
       pressAdd();
       pressChangeSign();
 
-      assertDisplayedNumberString("-5");
+      assertDisplayValueUpdate("-5");
     });
 
     // TODO: Add tests for notifying the interface of the clear button functionality change.
@@ -607,7 +610,8 @@
         decimalButton: decimalButton,
         changeSignButton: changeSignButton,
         equalsButton: equalsButton,
-        clearButton: clearButton
+        clearButton: clearButton,
+        onDisplayValueUpdate: displayValueUpdated
       });
     }
 
@@ -622,9 +626,9 @@
       element.parentNode.removeChild(element);
     }
 
-    function displayedNumberString() {
-      return displayPanel.innerHTML;
-    }
+    // function displayedNumberString() {
+    //   return displayPanel.innerHTML;
+    // }
 
     function pressNumber(number) {
       numberButtons[number].click();
@@ -666,8 +670,11 @@
       clearButton.click();
     }
 
-    function assertDisplayedNumberString(expectedNumberString) {
-      assert.equal(displayedNumberString(), expectedNumberString);
+    function assertDisplayValueUpdate(expectedNumberString) {
+      // assert.equal(displayedNumberString(), expectedNumberString);
+      // assert(displayValueUpdated.called);
+      sinon.assert.called(displayValueUpdated);
+      assert.equal(displayValueUpdated.lastCall.args[0], expectedNumberString);
     }
 
     function assertClearButtonFunctionality(expectedFunctionality) {

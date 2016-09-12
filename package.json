@@ -41,7 +41,8 @@
     "node": true,
     "mocha": true,
     "globals": {
-      "assert": true
+      "assert": true,
+      "sinon": true
     }
   }
 }

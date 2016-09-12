@@ -332,9 +332,8 @@
     displayValue(value);
   }
 
-  // TODO: Try notifying the interface of the result calculation here.
   function displayValue(valueString) {
-    opts.displayPanel.innerHTML = valueString;
+    opts.onDisplayValueUpdate(valueString);
   }
 
   // END DISPLAY FUNCTIONS
