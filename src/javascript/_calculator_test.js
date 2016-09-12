@@ -553,6 +553,23 @@
       assertDisplayedNumberString(30);
     });
 
+    it("doesn't keep adding fractional digits after the user presses the clear button", function() {
+      pressDecimal();
+      pressNumber(5);
+      pressClear();
+      pressNumber(5);
+
+      assertDisplayedNumberString("5");
+    });
+
+    it.skip("changes the sign of the operand and updates the displayed value even after the user sets an operation", function() {
+      pressNumber(5);
+      pressAdd();
+      pressChangeSign();
+
+      assertDisplayedNumberString("-5");
+    });
+
     // TODO: Add tests for showing the intermediate result.
 
     // TODO: Add tests for notifying the interface of the clear button functionality change.

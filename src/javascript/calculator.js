@@ -5,44 +5,45 @@
 (function () {
   "use strict";
 
-  var firstOperand      = null;
-  var secondOperand     = null;
-  var currentOperator   = null;
-  var decimalPoints     = null; // TODO: Rename to "fractionalDigits".
-
-  var lastOperand    = null;
-  var lastOperation  = null;
-
-  var operatorIsSet  = true;
-
-  var priorityOperator  = null;
-  var thirdOperand      = null;
-
-  var opts;
-  var currentValue  = null;
-
-  exports.OperationsEnum = {
-    ADDITION: 0,
-    SUBTRACTION: 1,
-    MULTIPLICATION: 2,
-    DIVISION: 3
-  };
-
-  // TODO: Convert these to regular constants.
-  var ADDITION        = exports.OperationsEnum.ADDITION;
-  var SUBTRACTION     = exports.OperationsEnum.SUBTRACTION;
-  var MULTIPLICATION  = exports.OperationsEnum.MULTIPLICATION;
-  var DIVISION        = exports.OperationsEnum.DIVISION;
+  var ADDITION        = 0;
+  var SUBTRACTION     = 1;
+  var MULTIPLICATION  = 2;
+  var DIVISION        = 3;
 
   var AC  = "AC";
   var C   = "C";
 
-  exports.initialize = function(options) {
-    resetValues();
+  var opts;
 
+  var firstOperand      = null;
+  var secondOperand     = null;
+  var operation         = null;
+  var fractionalDigits  = null;
+  var lastOperand       = null;
+  var lastOperation     = null;
+  var waitingForOperand = true;
+  var priorityOperation = null;
+  var thirdOperand      = null;
+  var currentValue      = null;
+
+  exports.initialize = function(options) {
     opts = options;
 
-    opts.numberButtons.forEach(function(numberButton) {
+    attachEventHandlers();
+
+    setClearButtonFunctionality(AC);
+
+    displayCurrentValue();
+  };
+
+  exports.terminate = function() {
+    opts = {};
+    currentValue = null;
+    allClear();
+  };
+
+  function attachEventHandlers() {
+    opts.numberButtons.forEach(function (numberButton) {
       numberButton.addEventListener("click", numberButtonClickHandler);
     });
 
@@ -57,15 +58,9 @@
 
     opts.equalsButton.addEventListener("click", equalsButtonClickHandler);
     opts.clearButton.addEventListener("click", clearButtonClickHandler);
+  }
 
-    setClearButtonFunctionality(AC);
-
-    displayCurrentValue();
-  };
-
-  exports.terminate = function() {
-    resetValues();
-  };
+  // BEGIN EVENT HANDLERS
 
   function numberButtonClickHandler(e) {
     var numberButton  = e.currentTarget;
@@ -73,11 +68,11 @@
 
     if (currentValue === null) currentValue = 0;
 
-    if (decimalPoints === null) {
+    if (fractionalDigits === null) {
       currentValue = (currentValue * 10) + numberValue;
     } else {
-      currentValue = currentValue + (numberValue / Math.pow(10, decimalPoints));
-      decimalPoints++;
+      currentValue = currentValue + (numberValue / Math.pow(10, fractionalDigits));
+      fractionalDigits++;
     }
 
     displayCurrentValue();
@@ -103,14 +98,14 @@
 
   function percentButtonClickHandler() {
     if (currentValue !== null) inputOperand(currentValue);
-    percentage();
+    calculatePercentage();
 
-    currentValue = null;
+    resetCurrentValueAndWaitForNewOperand();
   }
 
   function decimalButtonClickHandler() {
-    if (decimalPoints === null) {
-      decimalPoints = 1;
+    if (fractionalDigits === null) {
+      fractionalDigits = 1;
 
       var value = currentValue === null ? 0 : currentValue;
       value += ".";
@@ -123,6 +118,7 @@
     if (currentValue !== null) {
       currentValue = -currentValue;
     } else {
+      // TODO: Make the current value null when there is a new operand being input to get rid of this.
       firstOperand = -firstOperand;
     }
 
@@ -130,61 +126,39 @@
   }
 
   function equalsButtonClickHandler() {
-    if (currentValue !== null) inputOperand(currentValue);
-    var result = getResult();
+    inputCurrentValue();
 
-    currentValue = null;
-    decimalPoints = null;
+    calculateResult();
 
-    displayValue(result);
+    resetCurrentValueAndWaitForNewOperand();
   }
 
   function clearButtonClickHandler() {
     var currentFunctionality = getClearButtonFunctionality();
 
-    currentValue = null;
     if (currentFunctionality === AC) {
       allClear();
-
-      displayCurrentValue();
     } else {
       setClearButtonFunctionality(AC);
-
-      displayValue(0);
     }
+
+    resetCurrentValueAndWaitForNewOperand();
+    displayCurrentValue();
   }
 
-  function operationButtonClick(operation) {
+  // END EVENT HANDLERS
+
+
+  // BEGIN OPERAND FUNCTIONS
+
+  function inputCurrentValue() {
     if (currentValue !== null) inputOperand(currentValue);
-    setOperation(operation);
-
-    currentValue = null;
-    decimalPoints = null;
   }
 
-  function resetValues() {
-    opts = {};
-    currentValue = null;
-
-    allClear();
-  }
-
-  function displayCurrentValue() {
-    var value = currentValue === null ? 0 : currentValue;
-
-    displayValue(value);
-  }
-
-  function displayValue(valueString) {
-    // TODO: Use a notification to update the result instead of doing it in the code with the innerHTML method.
-    opts.displayPanel.innerHTML = valueString;
-  }
-
-  // TODO: Find a better name.
   function inputOperand(number) {
-    if (priorityOperator !== null) {
+    if (hasPendingPriorityOperation()) {
       thirdOperand = number;
-    } else if (currentOperator === null) {
+    } else if (hasNoOperation()) {
       firstOperand = number;
     } else {
       secondOperand = number;
@@ -192,76 +166,195 @@
 
     lastOperand = number;
 
-    operatorIsSet = false;
+    waitingForOperand = false;
   }
 
-  function setOperation(newOperator) {
+  // END OPERAND FUNCTIONS
+
+
+  // BEGIN OPERATION FUNCTIONS
+
+  function operationButtonClick(operation) {
+    inputCurrentValue();
+    inputOperation(operation);
+
+    resetCurrentValueAndWaitForNewOperand();
+  }
+
+  function inputOperation(newOperation) {
     if (firstOperand === null) {
       firstOperand = 0;
     }
 
-    if (isOperatorAlreadySet()) {
-      if (hasPendingPriorityOperation() && isNewOperatorPriority(newOperator)) {
-        setPriorityOperator(newOperator);
+    if (waitingForOperand) {
+      if (hasPendingPriorityOperation() && isNewOperationPriority(newOperation)) {
+        setPriorityOperation(newOperation);
 
         return;
       }
 
-      if (hasPendingPriorityOperation() && !isNewOperatorPriority(newOperator)) {
-        removePriorityOperator();
+      if (hasPendingPriorityOperation() && !isNewOperationPriority(newOperation)) {
+        removePriorityOperation();
 
-        getResult();
+        calculateResult();
       }
 
-      setOperator(newOperator);
+      setOperation(newOperation);
     }
 
     if (hasPendingPriorityOperation()) {
       calculatePendingPriorityOperation();
     }
 
-    if (isNewOperatorPriority(newOperator)) {
-      setPriorityOperator(newOperator);
+    if (isNewOperationPriority(newOperation)) {
+      setPriorityOperation(newOperation);
+      waitingForOperand = true;
 
       return;
     }
 
     if (hasPendingOperation()) {
-      getResult();
+      calculateResult();
     }
 
-    setOperator(newOperator);
+    waitingForOperand = true;
+    setOperation(newOperation);
   }
 
-  function percentage() {
+  function isNewOperationPriority(newOperation) {
+    return (operation === ADDITION || operation === SUBTRACTION) &&
+      (newOperation === MULTIPLICATION || newOperation === DIVISION);
+  }
+
+  function setOperation(newOperator) {
+    operation = newOperator;
+    lastOperation = operation;
+  }
+
+  function removeOperation() {
+    operation = null;
+  }
+
+  function hasPendingOperation() {
+    if (waitingForOperand) return false;
+
+    return (operation !== null && secondOperand !== null);
+  }
+
+  function hasNoOperation() {
+    return operation === null;
+  }
+
+  // END OPERATION FUNCTIONS
+
+
+  // BEGIN PRIORITY OPERATION FUNCTIONS
+
+  function hasPendingPriorityOperation() {
+    return priorityOperation !== null;
+  }
+
+  function calculatePendingPriorityOperation() {
+    secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperation);
+    removePriorityOperation();
+    thirdOperand = null;
+
+    displayValue(secondOperand);
+  }
+
+  function setPriorityOperation(newPriorityOperation) {
+    priorityOperation = newPriorityOperation;
+    lastOperation = priorityOperation;
+  }
+
+  function removePriorityOperation() {
+    priorityOperation = null;
+  }
+
+  // END PRIORITY OPERATION FUNCTIONS
+
+
+  // BEGIN PERCENT OPERATION FUNCTIONS
+
+  function getPercentage(number, percent) {
+    if (percent === null) percent = number;
+
+    return number * (percent / 100);
+  }
+
+  function calculatePercentage() {
     if (hasPendingPriorityOperation()) {
-      if (thirdOperand === null) thirdOperand = secondOperand;
-
-      thirdOperand = secondOperand * (thirdOperand / 100);
-
-      return;
+      thirdOperand = getPercentage(secondOperand, thirdOperand);
+    } else if (firstOperand !== null && operation !== null) {
+      secondOperand = getPercentage(firstOperand, secondOperand);
+    } else {
+      firstOperand /= 100;
     }
-
-    if (firstOperand !== null && currentOperator !== null) {
-      if (secondOperand === null) secondOperand = firstOperand;
-
-      secondOperand = firstOperand * (secondOperand / 100);
-
-      return;
-    }
-
-    firstOperand /= 100;
   }
 
-  function getResult() {
+  // END PERCENT OPERATION FUNCTIONS
+
+
+  // BEGIN CLEAR FUNCTIONS
+
+  function allClear() {
+    firstOperand      = null;
+    secondOperand     = null;
+    operation         = null;
+    fractionalDigits  = null;
+
+    lastOperand     = null;
+    lastOperation   = null;
+
+    waitingForOperand  = true;
+
+    priorityOperation  = null;
+    thirdOperand      = null;
+  }
+
+  function getClearButtonFunctionality() {
+    return opts.clearButton.dataset.currentFunctionality;
+  }
+
+  function setClearButtonFunctionality(functionality) {
+    // TODO: Use an internal variable for this, and send notifications when this changes.
+    opts.clearButton.dataset.currentFunctionality = functionality;
+  }
+
+  // END CLEAR FUNCTIONS
+
+
+  // BEGIN DISPLAY FUNCTIONS
+
+  function displayCurrentValue() {
+    var value = currentValue === null ? 0 : currentValue;
+
+    displayValue(value);
+  }
+
+  // TODO: Try notifying the interface of the result calculation here.
+  function displayValue(valueString) {
+    opts.displayPanel.innerHTML = valueString;
+  }
+
+  // END DISPLAY FUNCTIONS
+
+
+  // BEGIN GENERAL FUNCTIONS
+
+  function calculateResult() {
     if (firstOperand === null) {
+      displayValue(0);
+
       return 0;
     }
 
-    if (currentOperator === null || secondOperand === null) {
+    if (operation === null || secondOperand === null) {
       if (lastOperand !== null && lastOperation !== null) {
         firstOperand = getOperationResult(firstOperand, lastOperand, lastOperation);
       }
+
+      displayValue(firstOperand);
 
       return firstOperand;
     }
@@ -270,42 +363,25 @@
       calculatePendingPriorityOperation();
     }
 
-    firstOperand = getOperationResult(firstOperand, secondOperand, currentOperator);
+    firstOperand = getOperationResult(firstOperand, secondOperand, operation);
 
-    removeOperator();
+    removeOperation();
     secondOperand = null;
+
+    displayValue(firstOperand);
 
     return firstOperand;
   }
 
-  function allClear() {
-    firstOperand      = null;
-    secondOperand     = null;
-    currentOperator   = null;
-    decimalPoints     = null;
-
-    lastOperand     = null;
-    lastOperation   = null;
-
-    operatorIsSet  = true;
-
-    priorityOperator  = null;
-    thirdOperand      = null;
+  function resetCurrentValueAndWaitForNewOperand() {
+    currentValue = null;
+    fractionalDigits = null;
   }
 
-  function setClearButtonFunctionality(functionality) {
-    opts.clearButton.dataset.currentFunctionality = functionality;
-  }
-
-  function getClearButtonFunctionality() {
-    return opts.clearButton.dataset.currentFunctionality;
-  }
-
-  // TODO: Try notifying the interface of the result calculation here.
-  function getOperationResult(firstOperand, secondOperand, operator) {
+  function getOperationResult(firstOperand, secondOperand, operation) {
     var result;
 
-    switch (operator) {
+    switch (operation) {
       case ADDITION:
         result = firstOperand + secondOperand;
         break;
@@ -320,56 +396,8 @@
         break;
     }
 
-    displayValue(result);
-
     return result;
   }
 
-  function calculatePendingPriorityOperation() {
-    secondOperand = getOperationResult(secondOperand, thirdOperand, priorityOperator);
-    removePriorityOperator();
-    thirdOperand = null;
-  }
-
-  function hasPendingPriorityOperation() {
-    return priorityOperator !== null;
-  }
-
-  function isNewOperatorPriority(newOperator) {
-    return (currentOperator === ADDITION || currentOperator === SUBTRACTION) &&
-    (newOperator === MULTIPLICATION || newOperator === DIVISION);
-  }
-
-  function hasPendingOperation() {
-    if (isOperatorAlreadySet()) return false;
-
-    return (currentOperator !== null && secondOperand !== null);
-  }
-
-  function setPriorityOperator(newPriorityOperator) {
-    priorityOperator = newPriorityOperator;
-    lastOperation = priorityOperator;
-
-    operatorIsSet = true;
-  }
-
-  function removePriorityOperator() {
-    priorityOperator = null;
-  }
-
-  function setOperator(newOperator) {
-    currentOperator = newOperator;
-    lastOperation = currentOperator;
-
-    operatorIsSet = true;
-  }
-
-  function removeOperator() {
-    currentOperator = null;
-  }
-
-  // TODO: Rename to something like "expectingNumberInput".
-  function isOperatorAlreadySet() {
-    return operatorIsSet && currentOperator !== null;
-  }
+  // END GENERAL FUNCTIONS
 }());
