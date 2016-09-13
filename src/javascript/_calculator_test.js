@@ -21,12 +21,14 @@
     var equalsButton;
     var clearButton;
     var displayValueUpdated;
+    var clearButtonFunctionalityChanged;
 
     beforeEach(function() {
       container = document.createElement("div");
       document.body.appendChild(container);
 
       displayValueUpdated = sinon.spy();
+      clearButtonFunctionalityChanged = sinon.spy();
 
       createDOMElementsForCalculator();
       initializeCalculator();
@@ -449,13 +451,13 @@
     });
 
     it("shows the 'all clear' button when the calculator starts", function() {
-      assertClearButtonFunctionality("AC");
+      assertClearButtonFunctionalityChangedTo("AC");
     });
 
     it("shows the 'clear' button when the user inputs a number", function() {
       pressNumber(5);
 
-      assertClearButtonFunctionality("C");
+      assertClearButtonFunctionalityChangedTo("C");
     });
 
     it("clears the current result when the user presses the clear button", function() {
@@ -476,7 +478,7 @@
       pressNumber(5);
       pressClear();
 
-      assertClearButtonFunctionality("AC");
+      assertClearButtonFunctionalityChangedTo("AC");
     });
 
     it("resets the calculator when the user presses the 'all clear' button", function() {
@@ -611,7 +613,8 @@
         changeSignButton: changeSignButton,
         equalsButton: equalsButton,
         clearButton: clearButton,
-        onDisplayValueUpdate: displayValueUpdated
+        onDisplayValueUpdate: displayValueUpdated,
+        onClearButtonFunctionalityChange: clearButtonFunctionalityChanged
       });
     }
 
@@ -671,10 +674,9 @@
       assert.equal(displayValueUpdated.lastCall.args[0], expectedNumberString);
     }
 
-    function assertClearButtonFunctionality(expectedFunctionality) {
-      var currentFunctionality = clearButton.dataset.currentFunctionality;
-
-      assert.equal(currentFunctionality, expectedFunctionality);
+    function assertClearButtonFunctionalityChangedTo(expectedFunctionality) {
+      sinon.assert.called(clearButtonFunctionalityChanged);
+      assert.equal(clearButtonFunctionalityChanged.lastCall.args[0], expectedFunctionality);
     }
   });
 }());

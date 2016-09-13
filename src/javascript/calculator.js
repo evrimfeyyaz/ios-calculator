@@ -15,18 +15,21 @@
 
   var opts;
 
-  var firstOperand      = null;
-  var secondOperand     = null;
-  var operation         = null;
-  var fractionalDigits  = null;
-  var lastOperand       = null;
-  var lastOperation     = null;
-  var waitingForOperand = true;
-  var priorityOperation = null;
-  var thirdOperand      = null;
-  var currentValue      = null;
+  var firstOperand;
+  var secondOperand;
+  var operation;
+  var fractionalDigits;
+  var lastOperand;
+  var lastOperation;
+  var waitingForOperand;
+  var priorityOperation;
+  var thirdOperand;
+  var currentValue;
+  var clearButtonFunctionality;
 
   exports.initialize = function(options) {
+    initializeProperties();
+
     opts = options;
 
     attachEventHandlers();
@@ -58,6 +61,20 @@
 
     opts.equalsButton.addEventListener("click", equalsButtonClickHandler);
     opts.clearButton.addEventListener("click", clearButtonClickHandler);
+  }
+
+  function initializeProperties() {
+    firstOperand              = null;
+    secondOperand             = null;
+    operation                 = null;
+    fractionalDigits          = null;
+    lastOperand               = null;
+    lastOperation             = null;
+    waitingForOperand         = true;
+    priorityOperation         = null;
+    thirdOperand              = null;
+    currentValue              = null;
+    clearButtonFunctionality  = "AC";
   }
 
   // BEGIN EVENT HANDLERS
@@ -298,27 +315,16 @@
   // BEGIN CLEAR FUNCTIONS
 
   function allClear() {
-    firstOperand      = null;
-    secondOperand     = null;
-    operation         = null;
-    fractionalDigits  = null;
-
-    lastOperand     = null;
-    lastOperation   = null;
-
-    waitingForOperand  = true;
-
-    priorityOperation  = null;
-    thirdOperand      = null;
+    initializeProperties();
   }
 
   function getClearButtonFunctionality() {
-    return opts.clearButton.dataset.currentFunctionality;
+    return clearButtonFunctionality;
   }
 
   function setClearButtonFunctionality(functionality) {
-    // TODO: Use an internal variable for this, and send notifications when this changes.
-    opts.clearButton.dataset.currentFunctionality = functionality;
+    clearButtonFunctionality = functionality;
+    opts.onClearButtonFunctionalityChange(functionality);
   }
 
   // END CLEAR FUNCTIONS
