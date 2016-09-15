@@ -3,11 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <title>iOS Calculator in JavaScript</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:100,300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
   <script defer src="bundle.js"></script>
 </head>
 <body>
 
-<p>Hello World</p>
+<div class="frame clearfix">
+  <div class="result-frame">
+    <span id="result" class="bottom-align right-align"></span>
+  </div>
+  <div class="buttons clearfix">
+    <div class="left-buttons">
+      <div class="row dark-grey-buttons clearfix">
+        <button class="btn" id="clear-btn">C</button>
+        <button class="btn plus-minus-btn" id="change-sign-btn">
+          <span class="plus">+</span>
+          <span class="divider">/</span>
+          <span class="minus">−</span>
+        </button>
+        <button class="btn percent-btn" id="percent-btn">%</button>
+      </div>
+      <div class="light-grey-buttons clearfix">
+        <div class="row">
+          <button class="btn seven-btn btn-number" id="seven-btn" data-value="7">7</button>
+          <button class="btn eight-btn btn-number" id="eight-btn" data-value="8">8</button>
+          <button class="btn nine-btn btn-number" id="nine-btn" data-value="9">9</button>
+        </div>
+        <div class="row">
+          <button class="btn four-btn btn-number" id="four-btn" data-value="4">4</button>
+          <button class="btn five-btn btn-number" id="five-btn" data-value="5">5</button>
+          <button class="btn six-btn btn-number" id="six-btn" data-value="6">6</button>
+        </div>
+        <div class="row">
+          <button class="btn one-btn btn-number" id="one-btn" data-value="1">1</button>
+          <button class="btn two-btn btn-number" id="two-btn" data-value="2">2</button>
+          <button class="btn three-btn btn-number" id="three-btn" data-value="3">3</button>
+        </div>
+        <div class="row">
+          <button class="btn zero-btn btn-number" id="zero-btn" data-value="0">0</button>
+          <button class="btn point-btn" id="decimal-btn">.</button>
+        </div>
+      </div>
+    </div>
+    <div class="right-buttons">
+      <button class="row btn divide-btn" id="divide-btn">÷</button>
+      <button class="row btn multiply-btn" id="multiply-btn">×</button>
+      <button class="row btn subtract-btn" id="subtract-btn">−</button>
+      <button class="row btn add-btn" id="add-btn">+</button>
+      <button class="row btn calculate-btn" id="equals-btn">=</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
