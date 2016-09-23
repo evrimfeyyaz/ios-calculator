@@ -1,4 +1,5 @@
 html {
+  -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
 
@@ -9,187 +10,310 @@ html {
 }
 
 body {
-  font-family: -apple-system, 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-.frame {
-  width: 320px;
-  margin: 0 auto;
-}
-
-.result-frame {
-  position: relative;
-  background: #202020;
-  height: 106px;
-  font-size: 60px;
+  font-family: 'Roboto', sans-serif;
   font-weight: 100;
-  color: #fff;
 }
 
-#result {
-  padding-right: 12px;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.bottom-align,
-.right-align {
-  position: absolute;
-}
-
-.bottom-align {
-  bottom: 0;
-}
-
-.right-align {
-  right: 0;
-}
-
-.left-buttons {
-  float: left;
-  width: 75%;
-  background: #000;
-}
-
-.right-buttons {
-  background: green;
-  float: right;
-  width: 25%;
-}
-
-.row {
-  display: block;
-}
-
-.btn {
+button {
   border: none;
-  float: left;
-  width: 79px;
-  height: 79px;
-  box-shadow: -.5px -.5px 0 #000;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.btn {
-  font-family: -apple-system, 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  transition: background .4s;
+button:focus,
+button:active {
+  outline: none;
 }
 
-.btn:focus {
-  outline: 0;
+#l-main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
-.btn:active {
-  background: rgba(0, 0, 0, 0.1);
-  transition: background 0s;
+.calc {
+  background: lightgray;
+  display: flex;
+  flex-basis: 100%;
+  flex-direction: column;
 }
 
-.multiply-btn:focus,
-.subtract-btn:focus,
-.add-btn:focus {
-  border: 2px solid #000;
-  border-right: 2px solid rgba(0, 0, 0, 0);
-}
-
-.divide-btn:focus {
-  border: 2px solid #000;
-  border-right: 2px solid rgba(0, 0, 0, 0);
-  border-top: 2px solid rgba(0, 0, 0, 0);
-}
-
-.dark-grey-buttons button {
-  font-size: 25px;
-  font-weight: 100;
-  background-color: rgba(255, 255, 255, 0);
-}
-
-.dark-grey-buttons {
-  background: #c4c5c8;
-}
-
-.light-grey-buttons button {
-  font-size: 35px;
-  font-weight: 100;
-  background-color: rgba(255, 255, 255, 0);
-}
-
-.light-grey-buttons {
-  background: linear-gradient(to bottom, #d2d3d5 0%,#c1c2c6 100%);
-}
-
-.right-buttons button {
-  background: rgba(255, 255, 255, 0);
-  font-size: 45px;
+.calc-display {
+  background: #202020;
   color: #fff;
+  flex-grow: 1;
+  font-size: 20vw;
+  position: relative;
 }
 
-.right-buttons {
-  background: linear-gradient(to bottom, #f89512 0%,#f4780f 100%);
+.calc-display .content {
+  bottom: 0.5vw;
+  position: absolute;
+  right: 4vw;
 }
 
-.divide-btn {
-  padding-bottom: 5px;
+.calc-buttons {
+  background: #000;
+  border: 0.8vw solid #000;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.multiply-btn {
-  padding-bottom: 10px;
+.calc-buttons > button {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  color: #000;
+  flex-basis: 25%;
+  font-size: 11vw;
+  font-weight: 100;
+  transition: opacity .6s;
 }
 
-.subtract-btn {
-  padding-top: 5px;
+.calc-buttons > button:active,
+.calc-buttons > button.is-active {
+  opacity: .9;
+  transition: opacity 0s;
 }
 
-.add-btn {
-  padding-bottom: 6px;
+.calc-buttons #zero-button {
+  flex-basis: 50%;
 }
 
-.plus-minus-btn {
-  padding-top: 7px;
+#clear-button,
+#change-sign-button,
+#percent-button {
+  background: linear-gradient(to bottom, #cacbcc 0%, #c8cacb 100%);
+  border-right: 0.5px solid #000;
+  border-bottom: 0.5px solid #000;
+  font-size: 8vw;
 }
 
-.plus-minus-btn .plus {
-  display: block;
-  margin-right: -35px;
-  margin-left: 18px;
-  line-height: 24px;
-  float: left;
+#change-sign-button-minus {
+  font-size: 10vw;
+  line-height: 0;
+  margin-left: -1.5vw;
 }
 
-.plus-minus-btn .minus {
-  display: block;
-  margin-left: -45px;
-  margin-right: 20px;
-  margin-top: 6px;
-  float: right;
+#change-sign-button-plus {
+  margin-right: -1.5vw;
 }
 
-button.point-btn {
-  font-weight: 300;
-  font-size: 60px;
-  line-height: 30px;
-  padding-bottom: 18px;
+#seven-button,
+#eight-button,
+#nine-button {
+  background: linear-gradient(to bottom, #d7d8da 0%, #d2d3d5 100%);
+  border-right: 0.5px solid #000;
+  border-bottom: 0.5px solid #000;
 }
 
-.zero-btn {
-  width: 158px;
+#four-button,
+#five-button,
+#six-button {
+  background: linear-gradient(to bottom, #d3d4d6 0%, #cdced1 100%);
+  border-right: 0.5px solid #000;
+  border-bottom: 0.5px solid #000;
+}
+
+#one-button,
+#two-button,
+#three-button {
+  background: linear-gradient(to bottom, #cecfd1 0%, #c8cacc 100%);
+  border-right: 0.5px solid #000;
+  border-bottom: 0.5px solid #000;
+}
+
+#zero-button,
+#decimal-button {
+  background: linear-gradient(to bottom, #c8c9cc 0%, #c3c4c7 100%);
+  border-right: 0.5px solid #000;
+}
+
+#zero-button {
+  padding-left: 9.5vw;
   text-align: left;
-  padding-left: 31px
 }
 
-.buttons {
-  border: 2px solid #000;
+#decimal-button {
+  font-size: 22vw;
+  font-weight: 300;
+  line-height: 0;
+  padding-bottom: 7.5vw;
 }
 
-/* https://css-tricks.com/snippets/css/clear-fix/ */
-.clearfix:after {
-  visibility: hidden;
-  display: block;
-  font-size: 0;
-  content: " ";
-  clear: both;
-  height: 0;
+.calc-buttons .calc-buttons-operation,
+#equals-button {
+  color: #fff;
+  font-size: 15vw;
+  font-weight: 300;
 }
-.clearfix { display: inline-block; }
-/* start commented backslash hack \*/
-* html .clearfix { height: 1%; }
-.clearfix { display: block; }
-/* close commented backslash hack */
+
+.calc-buttons-operation.is-active-operation {
+  box-shadow: .4vw   0   0 0 #000 inset,
+              0     .4vw 0 0 #000 inset,
+              0    -.4vw 0 0 #000 inset;
+}
+
+#divide-button.is-active-operation {
+  box-shadow: 0    -.4vw 0 0 #000 inset,
+              .4vw     0 0 0 #000 inset;
+}
+
+#divide-button {
+  background: linear-gradient(to bottom, #f89312 0%, #f89212 100%);
+  border-bottom: 0.5px solid #000;
+}
+
+#multiply-button {
+  background: linear-gradient(to bottom, #f89112 0%, #f78c11 100%);
+  border-bottom: 0.5px solid #000;
+  padding-bottom: 2vw;
+}
+
+#subtract-button {
+  background: linear-gradient(to bottom, #f78d11 0%, #f68610 100%);
+  border-bottom: 0.5px solid #000;
+  font-size: 32vw;
+  font-weight: 100;
+  line-height: 0;
+}
+
+#add-button {
+  background: linear-gradient(to bottom, #f68710 0%, #f57f0f 100%);
+  border-bottom: 0.5px solid #000;
+  padding-bottom: 1vw;
+}
+
+#equals-button {
+  background: linear-gradient(to bottom, #f58010 0%, #f58010 100%);
+  font-size: 17vw;
+}
+
+.author-info {
+  height: 10vh;
+}
+
+@media (min-width: 376px) {
+  #l-main {
+    margin: 20px auto 0;
+    height: 667px;
+    width: 375px;
+  }
+
+  .calc-display {
+    font-size: 75px;
+  }
+
+  .calc-display .content {
+    bottom: 2px;
+    right: 15px;
+  }
+
+  .calc-buttons {
+    border: 2px solid #000;
+  }
+
+  .calc-buttons > button {
+    font-size: 41px;
+  }
+
+  #clear-button,
+  #change-sign-button,
+  #percent-button {
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    font-size: 30px;
+  }
+
+  #seven-button,
+  #eight-button,
+  #nine-button {
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+
+  #four-button,
+  #five-button,
+  #six-button {
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+
+  #one-button,
+  #two-button,
+  #three-button {
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+  }
+
+  #zero-button,
+  #decimal-button {
+    border-right: 1px solid #000;
+  }
+
+  #zero-button {
+    padding-left: 36px;
+  }
+
+  #decimal-button {
+    font-size: 82px;
+    padding-bottom: 28px;
+  }
+
+  #divide-button {
+    border-bottom: 1px solid #000;
+  }
+
+  #change-sign-button-minus {
+    font-size: 38px;
+    margin-left: -6px;
+  }
+
+  #change-sign-button-plus {
+    margin-right: -6px;
+  }
+
+  .calc-buttons .calc-buttons-operation,
+  #equals-button {
+    font-size: 56px;
+  }
+
+  .calc-buttons-operation.is-active-operation {
+    box-shadow: 1px    0 0 0 #000 inset,
+                0    1px 0 0 #000 inset,
+                0   -1px 0 0 #000 inset;
+  }
+
+  #divide-button.is-active-operation {
+    box-shadow: 0   -1px 0 0 #000 inset,
+                1px    0 0 0 #000 inset;
+  }
+
+  #multiply-button {
+    border-bottom: 1px solid #000;
+    padding-bottom: 7px;
+  }
+
+  #subtract-button {
+    border-bottom: 1px solid #000;
+    font-size: 120px;
+  }
+
+  #add-button {
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+  }
+
+  #equals-button {
+    font-size: 63px;
+  }
+
+  .author-info {
+    height: 38px;
+  }
+}
