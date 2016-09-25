@@ -62,6 +62,20 @@
       assertCurrentDisplayValue("1");
     });
 
+    it("rounds numbers to 15 decimal places", function() {
+      pressNumber(0);
+      pressDecimal();
+      pressNumber(1);
+      pressMultiply();
+      pressNumber(0);
+      pressDecimal();
+      pressNumber(2);
+
+      pressEquals();
+
+      assertCurrentDisplayValue("0.02");
+    });
+
     // END BASIC FUNCTIONALITY TESTS
 
 

@@ -127,7 +127,7 @@
       var value = currentValue === null ? 0 : currentValue;
       value += ".";
 
-      displayValue(value);
+      displayString(value);
     }
   }
 
@@ -137,7 +137,7 @@
       displayCurrentValue();
     } else {
       firstOperand = -firstOperand;
-      displayValue(firstOperand);
+      displayFloatValue(firstOperand);
     }
 
   }
@@ -276,7 +276,7 @@
     removePriorityOperation();
     thirdOperand = null;
 
-    displayValue(secondOperand);
+    displayFloatValue(secondOperand);
   }
 
   function setPriorityOperation(newPriorityOperation) {
@@ -335,11 +335,15 @@
   function displayCurrentValue() {
     var value = currentValue === null ? 0 : currentValue;
 
-    displayValue(value);
+    displayFloatValue(value);
   }
 
-  function displayValue(valueString) {
-    opts.onDisplayValueUpdate(valueString);
+  function displayFloatValue(floatValue) {
+    displayString(+floatValue.toFixed(15));
+  }
+
+  function displayString(stringValue) {
+    opts.onDisplayValueUpdate(stringValue);
   }
 
   // END DISPLAY FUNCTIONS
@@ -349,7 +353,7 @@
 
   function calculateResult() {
     if (firstOperand === null) {
-      displayValue(0);
+      displayFloatValue(0);
 
       return 0;
     }
@@ -359,7 +363,7 @@
         firstOperand = getOperationResult(firstOperand, lastOperand, lastOperation);
       }
 
-      displayValue(firstOperand);
+      displayFloatValue(firstOperand);
 
       return firstOperand;
     }
@@ -373,7 +377,7 @@
     removeOperation();
     secondOperand = null;
 
-    displayValue(firstOperand);
+    displayFloatValue(firstOperand);
 
     return firstOperand;
   }
