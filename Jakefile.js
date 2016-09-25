@@ -82,11 +82,11 @@
     karma.run({
       configFile: KARMA_CONFIG,
       expectedBrowsers: [
-        "Chrome 53.0.2785 (Mac OS X 10.11.6)",
-        "IE 11.0.0 (Windows 7 0.0.0)",
-        "Safari 9.1.3 (Mac OS X 10.11.6)",
-        "Firefox 48.0.0 (Mac OS X 10.11.0)",
-        "Mobile Safari 9.0.0 (iOS 9.3.0)"
+        "Chrome 53.0.2785 (Mac OS X 10.12.0)",
+        "Edge 14.14393.0 (Windows 10 0.0.0)",
+        "Safari 10.0.0 (Mac OS X 10.12.0)",
+        "Firefox 48.0.0 (Mac OS X 10.12.0)",
+        "Mobile Safari 10.0.0 (iOS 10.0.0)"
       ],
       strict: !process.env.loose
     }, complete, fail);
