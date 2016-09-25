@@ -52,7 +52,7 @@
       }
       pressNumber(0);
 
-      assertCurrentDisplayValue("1234567890");
+      assertCurrentDisplayValue("1,234,567,890");
     });
 
     it("doesn't display a '0' in front of numbers, even if it's pressed", function() {
@@ -74,6 +74,28 @@
       pressEquals();
 
       assertCurrentDisplayValue("0.02");
+    });
+
+    it("comma separates thousands", function() {
+      pressNumber(1);
+      pressNumber(2);
+      pressNumber(3);
+      pressNumber(4);
+      pressNumber(5);
+      pressNumber(6);
+      pressNumber(7);
+
+      assertCurrentDisplayValue("1,234,567");
+    });
+
+    it("comma separates values after putting a decimal point", function() {
+      pressNumber(1);
+      pressNumber(2);
+      pressNumber(3);
+      pressNumber(4);
+      pressDecimal();
+
+      assertCurrentDisplayValue("1,234.");
     });
 
     // END BASIC FUNCTIONALITY TESTS

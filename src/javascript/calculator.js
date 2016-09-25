@@ -125,9 +125,8 @@
       fractionalDigits = 1;
 
       var value = currentValue === null ? 0 : currentValue;
-      value += ".";
 
-      displayString(value);
+      displayString(formatNumber(value) + ".");
     }
   }
 
@@ -339,11 +338,22 @@
   }
 
   function displayFloatValue(floatValue) {
-    displayString(+floatValue.toFixed(15));
+    displayString(formatNumber(floatValue));
   }
 
   function displayString(stringValue) {
     opts.onDisplayValueUpdate(stringValue);
+  }
+
+  // By Elias Zamaria: http://stackoverflow.com/a/2901298
+  function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  }
+
+  function formatNumber(number) {
+    return numberWithCommas(+number.toFixed(15));
   }
 
   // END DISPLAY FUNCTIONS
