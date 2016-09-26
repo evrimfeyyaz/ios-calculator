@@ -8,28 +8,34 @@
   var calculator = require("./calculator.js");
 
   window.addEventListener("DOMContentLoaded", function() {
-    var displayPanel = document.getElementById("result");
+    var ACTIVE_OPERATION_BUTTON_CLASS_NAME = "is-active-operation";
+    var OPERATION_BUTTON_CLASS_NAME = "calc-buttons-operation";
+
+    var displayPanel = document.querySelector(".calc-display .content");
     var numberButtons = [
-      document.getElementById("zero-btn"),
-      document.getElementById("one-btn"),
-      document.getElementById("two-btn"),
-      document.getElementById("three-btn"),
-      document.getElementById("four-btn"),
-      document.getElementById("five-btn"),
-      document.getElementById("six-btn"),
-      document.getElementById("seven-btn"),
-      document.getElementById("eight-btn"),
-      document.getElementById("nine-btn")
+      document.getElementById("zero-button"),
+      document.getElementById("one-button"),
+      document.getElementById("two-button"),
+      document.getElementById("three-button"),
+      document.getElementById("four-button"),
+      document.getElementById("five-button"),
+      document.getElementById("six-button"),
+      document.getElementById("seven-button"),
+      document.getElementById("eight-button"),
+      document.getElementById("nine-button")
     ];
-    var addButton = document.getElementById("add-btn");
-    var subtractButton = document.getElementById("subtract-btn");
-    var multiplyButton = document.getElementById("multiply-btn");
-    var divideButton = document.getElementById("divide-btn");
-    var percentButton = document.getElementById("percent-btn");
-    var decimalButton = document.getElementById("decimal-btn");
-    var changeSignButton = document.getElementById("change-sign-btn");
-    var equalsButton = document.getElementById("equals-btn");
-    var clearButton = document.getElementById("clear-btn");
+    var addButton = document.getElementById("add-button");
+    var subtractButton = document.getElementById("subtract-button");
+    var multiplyButton = document.getElementById("multiply-button");
+    var divideButton = document.getElementById("divide-button");
+    var percentButton = document.getElementById("percent-button");
+    var decimalButton = document.getElementById("decimal-button");
+    var changeSignButton = document.getElementById("change-sign-button");
+    var equalsButton = document.getElementById("equals-button");
+    var clearButton = document.getElementById("clear-button");
+
+    var buttons = document.querySelectorAll(".calc-buttons > button");
+    var operationButtons = [addButton, subtractButton, multiplyButton, divideButton];
 
     calculator.initialize({
       displayPanel: displayPanel,
@@ -47,12 +53,56 @@
       onClearButtonFunctionalityChange: clearButtonFunctionalityChanged
     });
 
+    for (var i = 0; i < buttons.length; i++) {
+      makeButtonSquare(buttons[i]);
+      attachHandlerForActiveOperation(buttons[i], operationButtons, changeSignButton, percentButton);
+    }
+
     function displayValueUpdated(newValue) {
       displayPanel.innerHTML = newValue;
+      fitDisplayValueToContainer();
+    }
+
+    function fitDisplayValueToContainer() {
+      var displayContainerSize = displayPanel.parentNode.offsetWidth;
+      var displayValueRightOffset = parseInt(window.getComputedStyle(displayPanel, null).getPropertyValue("right"));
+      var displayValueLeftOffset = displayValueRightOffset * 0.2;
+
+      displayContainerSize -= displayValueRightOffset + displayValueLeftOffset;
+
+      var displayValueSize = parseInt(displayPanel.clientWidth);
+      var scaleFactor = displayContainerSize / displayValueSize;
+
+      if (scaleFactor < 1) {
+        displayPanel.style.transform = "scale(" + scaleFactor + ")";
+      } else {
+        displayPanel.style.transform = "scale(1)";
+      }
     }
 
     function clearButtonFunctionalityChanged(newFunctionality) {
       clearButton.innerHTML = newFunctionality;
+    }
+
+    function makeButtonSquare(button) {
+      if (button.id === "zero-button") return;
+      button.style.height = window.getComputedStyle(button, null).getPropertyValue("width");
+    }
+
+    function attachHandlerForActiveOperation(button, operationButtons, changeSignButton, percentButton) {
+      button.addEventListener("click", function() {
+        if (button === changeSignButton || button === percentButton) return;
+
+        var isOperationButton = button.classList.contains(OPERATION_BUTTON_CLASS_NAME);
+
+        for (var i = 0; i < operationButtons.length; i++) {
+          operationButtons[i].classList.remove(ACTIVE_OPERATION_BUTTON_CLASS_NAME);
+        }
+
+        if (isOperationButton) {
+          button.classList.add(ACTIVE_OPERATION_BUTTON_CLASS_NAME);
+        }
+      });
     }
   });
 }());

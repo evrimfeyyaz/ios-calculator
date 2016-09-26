@@ -57,6 +57,7 @@ button:active {
   bottom: 0.5vw;
   position: absolute;
   right: 4vw;
+  transform-origin: right bottom;
 }
 
 .calc-buttons {
