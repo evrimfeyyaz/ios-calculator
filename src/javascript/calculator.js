@@ -89,12 +89,15 @@
 
     if (fractionalDigits === null) {
       currentValue = currentValue.times(10).plus(numberValue);
+
+      displayCurrentValue();
     } else {
       currentValue = currentValue.plus(numberValue.dividedBy(Decimal.pow(10, fractionalDigits)));
+
+      displayCurrentValue(fractionalDigits);
+
       fractionalDigits++;
     }
-
-    displayCurrentValue();
 
     setClearButtonFunctionality(C);
   }
@@ -341,14 +344,18 @@
 
   // BEGIN DISPLAY FUNCTIONS
 
-  function displayCurrentValue() {
+  function displayCurrentValue(toFixed) {
     var value = currentValue === null ? new Decimal(0) : currentValue;
 
-    displayNumber(value);
+    displayNumber(value, toFixed);
   }
 
-  function displayNumber(number) {
-    displayString(formatNumberString(number.toString()));
+  function displayNumber(number, toFixed) {
+    if (toFixed !== undefined && toFixed !== null) {
+      displayString(formatNumberString(number.toFixed(toFixed).toString()));
+    } else {
+      displayString(formatNumberString(number.toString()));
+    }
   }
 
   function displayString(stringValue) {

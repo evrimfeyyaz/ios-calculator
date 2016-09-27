@@ -596,6 +596,15 @@
       assertCurrentDisplayValue("1.2");
     });
 
+    it("shows zeroes after decimal point", function() {
+      pressDecimal();
+      pressNumber(0);
+      pressNumber(0);
+      pressNumber(0);
+
+      assertCurrentDisplayValue("0.000");
+    });
+
     // END DECIMAL BUTTON TESTS
 
 
