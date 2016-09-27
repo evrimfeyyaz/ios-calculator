@@ -312,6 +312,7 @@
       displayValue = firstOperand;
     }
 
+    lastOperand = displayValue;
     displayFloatValue(displayValue);
   }
 

@@ -552,6 +552,20 @@
       assertCurrentDisplayValue("2");
     });
 
+    it("uses the calculated percent value when repeating an operation", function() {
+      pressNumber(1);
+      pressNumber(0);
+      pressAdd();
+      pressNumber(5);
+      pressNumber(0);
+      pressPercent();
+
+      pressEquals();
+      pressEquals();
+
+      assertCurrentDisplayValue("20");
+    });
+
     // END PERCENTAGE OPERATION TESTS
 
 
