@@ -9,6 +9,10 @@ html {
   box-sizing: inherit;
 }
 
+a {
+  text-decoration: none;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   font-weight: 100;
@@ -197,6 +201,17 @@ button:active {
 
 .author-info {
   height: 10vh;
+  margin-top: 3vh;
+  text-align: center;
+}
+
+.social-link {
+  color: #ff9f5d;
+  font-weight: 300;
+}
+
+.social-link:hover {
+  color: #ff7a00;
 }
 
 @media (min-width: 376px) {
