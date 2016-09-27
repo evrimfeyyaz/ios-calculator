@@ -85,7 +85,7 @@
         "Chrome 53.0.2785 (Mac OS X 10.12.0)",
         "Edge 14.14393.0 (Windows 10 0.0.0)",
         "Safari 10.0.0 (Mac OS X 10.12.0)",
-        "Firefox 48.0.0 (Mac OS X 10.12.0)",
+        "Firefox 49.0.0 (Mac OS X 10.12.0)",
         "Mobile Safari 10.0.0 (iOS 10.0.0)"
       ],
       strict: !process.env.loose
