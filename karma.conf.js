@@ -15,7 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'src/**/*.js'
+      'src/**/*.js',
+      'node_modules/decimal.js/package.json',
+      'node_modules/decimal.js/decimal.js'
     ],
 
 
@@ -27,7 +29,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/**/*.js': ['commonjs']
+      'src/**/*.js': ['commonjs'],
+      'node_modules/decimal.js/package.json': ['commonjs'],
+      'node_modules/decimal.js/decimal.js': ['commonjs']
     },
 
 

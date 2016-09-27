@@ -62,7 +62,7 @@
       assertCurrentDisplayValue("1");
     });
 
-    it("rounds number when a floating point number can't be represented properly", function() {
+    it("represents floating point numbers precisely", function() {
       pressNumber(0);
       pressDecimal();
       pressNumber(1);

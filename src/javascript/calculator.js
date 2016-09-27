@@ -5,6 +5,8 @@
 (function () {
   "use strict";
 
+  var Decimal = require("decimal.js");
+
   var ADDITION        = 0;
   var SUBTRACTION     = 1;
   var MULTIPLICATION  = 2;
@@ -81,14 +83,14 @@
 
   function numberButtonClickHandler(e) {
     var numberButton  = e.currentTarget;
-    var numberValue   = +numberButton.dataset.value;
+    var numberValue   = new Decimal(numberButton.dataset.value);
 
-    if (currentValue === null) currentValue = 0;
+    if (currentValue === null) currentValue = new Decimal(0);
 
     if (fractionalDigits === null) {
-      currentValue = (currentValue * 10) + numberValue;
+      currentValue = currentValue.times(10).plus(numberValue);
     } else {
-      currentValue = currentValue + (numberValue / Math.pow(10, fractionalDigits));
+      currentValue = currentValue.plus(numberValue.dividedBy(Decimal.pow(10, fractionalDigits)));
       fractionalDigits++;
     }
 
@@ -124,19 +126,19 @@
     if (fractionalDigits === null) {
       fractionalDigits = 1;
 
-      var value = currentValue === null ? 0 : currentValue;
+      var value = currentValue === null ? new Decimal(0) : currentValue;
 
-      displayString(formatNumber(value) + ".");
+      displayString(formatNumberString(value.toString()) + ".");
     }
   }
 
   function changeSignButtonClickHandler() {
     if (currentValue !== null) {
-      currentValue = -currentValue;
+      currentValue = currentValue.negated();
       displayCurrentValue();
     } else {
-      firstOperand = -firstOperand;
-      displayFloatValue(firstOperand);
+      firstOperand = firstOperand.negated();
+      displayNumber(firstOperand);
     }
 
   }
@@ -199,7 +201,7 @@
 
   function inputOperation(newOperation) {
     if (firstOperand === null) {
-      firstOperand = 0;
+      firstOperand = new Decimal(0);
     }
 
     if (waitingForOperand) {
@@ -275,7 +277,7 @@
     removePriorityOperation();
     thirdOperand = null;
 
-    displayFloatValue(secondOperand);
+    displayNumber(secondOperand);
   }
 
   function setPriorityOperation(newPriorityOperation) {
@@ -295,7 +297,7 @@
   function getPercentage(number, percent) {
     if (percent === null) percent = number;
 
-    return number * (percent / 100);
+    return number.times(percent.dividedBy(100));
   }
 
   function calculatePercentage() {
@@ -313,7 +315,7 @@
     }
 
     lastOperand = displayValue;
-    displayFloatValue(displayValue);
+    displayNumber(displayValue);
   }
 
   // END PERCENT OPERATION FUNCTIONS
@@ -340,34 +342,28 @@
   // BEGIN DISPLAY FUNCTIONS
 
   function displayCurrentValue() {
-    var value = currentValue === null ? 0 : currentValue;
+    var value = currentValue === null ? new Decimal(0) : currentValue;
 
-    if (fractionalDigits > 0) {
-      displayFloatValue(value, fractionalDigits);
-    } else {
-      displayFloatValue(value);
-    }
+    displayNumber(value);
   }
 
-  function displayFloatValue(floatValue, roundTo) {
-    displayString(formatNumber(floatValue, roundTo));
+  function displayNumber(number) {
+    displayString(formatNumberString(number.toString()));
   }
 
   function displayString(stringValue) {
     opts.onDisplayValueUpdate(stringValue);
   }
 
-  // By Elias Zamaria: http://stackoverflow.com/a/2901298
-  function numberWithCommas(x) {
-    var parts = x.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+  function formatNumberString(numberString) {
+    return numberStringWithCommas(numberString);
   }
 
-  function formatNumber(number, roundTo) {
-    if (roundTo === null || roundTo === undefined) roundTo = 15;
-
-    return numberWithCommas(+number.toFixed(roundTo));
+  // Adapted from a snippet by Elias Zamaria: http://stackoverflow.com/a/2901298
+  function numberStringWithCommas(numberString) {
+    var parts = numberString.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
   }
 
   // END DISPLAY FUNCTIONS
@@ -377,7 +373,7 @@
 
   function calculateResult() {
     if (firstOperand === null) {
-      displayFloatValue(0);
+      displayNumber(0);
 
       return 0;
     }
@@ -387,7 +383,7 @@
         firstOperand = getOperationResult(firstOperand, lastOperand, lastOperation);
       }
 
-      displayFloatValue(firstOperand);
+      displayNumber(firstOperand);
 
       return firstOperand;
     }
@@ -401,7 +397,7 @@
     removeOperation();
     secondOperand = null;
 
-    displayFloatValue(firstOperand);
+    displayNumber(firstOperand);
 
     return firstOperand;
   }
@@ -416,16 +412,16 @@
 
     switch (operation) {
       case ADDITION:
-        result = firstOperand + secondOperand;
+        result = firstOperand.plus(secondOperand);
         break;
       case SUBTRACTION:
-        result = firstOperand - secondOperand;
+        result = firstOperand.minus(secondOperand);
         break;
       case MULTIPLICATION:
-        result = firstOperand * secondOperand;
+        result = firstOperand.times(secondOperand);
         break;
       case DIVISION:
-        result = firstOperand / secondOperand;
+        result = firstOperand.dividedBy(secondOperand);
         break;
     }
 
