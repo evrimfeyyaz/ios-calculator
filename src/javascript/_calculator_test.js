@@ -62,20 +62,6 @@
       assertCurrentDisplayValue("1");
     });
 
-    it("represents floating point numbers precisely", function() {
-      pressNumber(0);
-      pressDecimal();
-      pressNumber(1);
-      pressMultiply();
-      pressNumber(0);
-      pressDecimal();
-      pressNumber(2);
-
-      pressEquals();
-
-      assertCurrentDisplayValue("0.02");
-    });
-
     it("comma separates thousands", function() {
       pressNumber(1);
       pressNumber(2);
@@ -608,15 +594,6 @@
       pressDecimal();
 
       assertCurrentDisplayValue("1.2");
-    });
-
-    it("rounds the shown number to the amount of decimal places entered", function() {
-      pressNumber(5);
-      pressDecimal();
-      pressNumber(3);
-      pressNumber(2);
-
-      assertCurrentDisplayValue("5.32");
     });
 
     // END DECIMAL BUTTON TESTS
