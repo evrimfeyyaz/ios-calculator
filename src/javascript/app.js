@@ -37,6 +37,8 @@
     var buttons = document.querySelectorAll(".calc-buttons > button");
     var operationButtons = [addButton, subtractButton, multiplyButton, divideButton];
 
+    document.addEventListener("touchstart", preventZoom);
+
     calculator.initialize({
       displayPanel: displayPanel,
       numberButtons: numberButtons,
@@ -103,6 +105,19 @@
           button.classList.add(ACTIVE_OPERATION_BUTTON_CLASS_NAME);
         }
       });
+    }
+
+    function preventZoom(e) {
+      var t2 = e.timeStamp;
+      var t1 = e.currentTarget.dataset.lastTouch || t2;
+      var dt = t2 - t1;
+      var fingers = e.originalEvent.touches.length;
+      e.currentTarget.dataset.lastTouch = t2;
+      if (!dt || dt > 500 || fingers > 1) return; // not double-tap
+
+      e.preventDefault(); // double tap - prevent the zoom
+      // also synthesize click events we just swallowed up
+      e.currentTarget.trigger('click').trigger('click');
     }
   });
 }());
