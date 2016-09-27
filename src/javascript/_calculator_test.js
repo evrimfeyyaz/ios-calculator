@@ -470,7 +470,7 @@
 
     // BEGIN PERCENTAGE OPERATION TESTS
 
-    it("calculates the percentage of the last operand when asked after putting both operands", function() {
+    it("calculates the percentage of the last operand and outputs it after putting both operands", function() {
       pressNumber(1);
       pressNumber(2);
       pressAdd();
@@ -478,16 +478,20 @@
       pressNumber(0);
       pressPercent();
 
+      assertCurrentDisplayValue("6");
+
       pressEquals();
 
       assertCurrentDisplayValue("18");
     });
 
-    it("calculates the percentage of the first operand when asked after only putting the first operand and an operator", function() {
+    it("calculates the percentage of the first operand and shows it when asked after only putting the first operand and an operator", function() {
       pressNumber(1);
       pressNumber(0);
       pressAdd();
       pressPercent();
+
+      assertCurrentDisplayValue("1");
 
       pressEquals();
 
@@ -496,6 +500,8 @@
 
     it("outputs '0' when the user presses the percentage button without any operand or operator, and then asks for the result", function() {
       pressPercent();
+
+      assertCurrentDisplayValue("0");
 
       pressEquals();
 
@@ -511,6 +517,8 @@
       pressNumber(0);
       pressPercent();
 
+      assertCurrentDisplayValue("3");
+
       pressEquals();
 
       assertCurrentDisplayValue("23");
@@ -524,6 +532,8 @@
       pressMultiply();
       pressPercent();
 
+      assertCurrentDisplayValue("1");
+
       pressEquals();
 
       assertCurrentDisplayValue("15");
@@ -534,6 +544,8 @@
       pressNumber(0);
       pressNumber(0);
       pressPercent();
+
+      assertCurrentDisplayValue("2");
 
       pressEquals();
 

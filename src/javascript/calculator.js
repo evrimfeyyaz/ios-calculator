@@ -299,13 +299,20 @@
   }
 
   function calculatePercentage() {
+    var displayValue = null;
+
     if (hasPendingPriorityOperation()) {
       thirdOperand = getPercentage(secondOperand, thirdOperand);
+      displayValue = thirdOperand;
     } else if (firstOperand !== null && operation !== null) {
       secondOperand = getPercentage(firstOperand, secondOperand);
+      displayValue = secondOperand;
     } else {
       firstOperand /= 100;
+      displayValue = firstOperand;
     }
+
+    displayFloatValue(displayValue);
   }
 
   // END PERCENT OPERATION FUNCTIONS
