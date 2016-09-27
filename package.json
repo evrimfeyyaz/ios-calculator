@@ -8,6 +8,7 @@
   "devDependencies": {
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
+    "decimal.js": "^6.0.0",
     "http-server": "^0.9.0",
     "jake": "^8.0.12",
     "jshint": "^2.9.3",
