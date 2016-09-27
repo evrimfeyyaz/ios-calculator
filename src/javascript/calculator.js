@@ -334,11 +334,15 @@
   function displayCurrentValue() {
     var value = currentValue === null ? 0 : currentValue;
 
-    displayFloatValue(value);
+    if (fractionalDigits > 0) {
+      displayFloatValue(value, fractionalDigits);
+    } else {
+      displayFloatValue(value);
+    }
   }
 
-  function displayFloatValue(floatValue) {
-    displayString(formatNumber(floatValue));
+  function displayFloatValue(floatValue, roundTo) {
+    displayString(formatNumber(floatValue, roundTo));
   }
 
   function displayString(stringValue) {
@@ -352,8 +356,10 @@
     return parts.join(".");
   }
 
-  function formatNumber(number) {
-    return numberWithCommas(+number.toFixed(15));
+  function formatNumber(number, roundTo) {
+    if (roundTo === null || roundTo === undefined) roundTo = 15;
+
+    return numberWithCommas(+number.toFixed(roundTo));
   }
 
   // END DISPLAY FUNCTIONS

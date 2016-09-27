@@ -62,7 +62,7 @@
       assertCurrentDisplayValue("1");
     });
 
-    it("rounds numbers to 15 decimal places", function() {
+    it("rounds number when a floating point number can't be represented properly", function() {
       pressNumber(0);
       pressDecimal();
       pressNumber(1);
@@ -582,6 +582,15 @@
       pressDecimal();
 
       assertCurrentDisplayValue("1.2");
+    });
+
+    it("rounds the shown number to the amount of decimal places entered", function() {
+      pressNumber(5);
+      pressDecimal();
+      pressNumber(3);
+      pressNumber(2);
+
+      assertCurrentDisplayValue("5.32");
     });
 
     // END DECIMAL BUTTON TESTS
