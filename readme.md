@@ -12,9 +12,11 @@ Prerequisites
 Installation
 ------------
 
-1. Run `./jake.sh` to build.
-1. Run `./jake.sh run` to run a local server.
-1. Use `./jake.sh -T` to see all available tasks.
+1. Run `npm rebuild` first.
+1. Afterwards, run `./jake.sh` to build.
+1. And then use `./jake.sh run` to run a local server.
+
+To see all available tasks, use `./jake.sh -T`.
 
 But why?
 --------
