@@ -102,7 +102,7 @@
     jake.exec("node node_modules/.bin/browserify src/javascript/app.js -o " + DIST_DIR + "/bundle.js",
       { interactive: true },
       function() {
-        console.log("Minifying the JavaScript code: .")
+        console.log("Minifying the JavaScript code: .");
         jake.exec("node node_modules/.bin/uglifyjs " + DIST_DIR + "/bundle.js " +
           "-o " + DIST_DIR + "/bundle.min.js " +
           "--source-map " + DIST_DIR + "/bundle.min.js.map " +
@@ -110,8 +110,9 @@
           "-p 2 -m -c --screw-ie8",
           { interactive: true });
 
-        
-
+        console.log("Minifying the stylesheet: .");
+        jake.exec("node node_modules/.bin/postcss --use autoprefixer --use cssnano -o generated/dist/style.css generated/dist/style.css",
+          { interactive: true });
         complete();
     });
   }, { async: true });
