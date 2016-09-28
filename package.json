@@ -22,7 +22,8 @@
     "shelljs": "^0.7.4",
     "simplebuild-jshint": "^1.3.0",
     "simplebuild-karma": "^1.0.0",
-    "sinon": "^1.17.5"
+    "sinon": "^1.17.5",
+    "uglify-js": "^2.7.3"
   },
   "jshintConfig": {
     "bitwise": true,
