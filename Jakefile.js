@@ -101,7 +101,19 @@
 
     jake.exec("node node_modules/.bin/browserify src/javascript/app.js -o " + DIST_DIR + "/bundle.js",
       { interactive: true },
-      complete);
+      function() {
+        console.log("Minifying the JavaScript code: .")
+        jake.exec("node node_modules/.bin/uglifyjs " + DIST_DIR + "/bundle.js " +
+          "-o " + DIST_DIR + "/bundle.min.js " +
+          "--source-map " + DIST_DIR + "/bundle.min.js.map " +
+          "--source-map-url bundle.min.js.map " +
+          "-p 2 -m -c --screw-ie8",
+          { interactive: true });
+
+        
+
+        complete();
+    });
   }, { async: true });
 
   directory(DIST_DIR);
