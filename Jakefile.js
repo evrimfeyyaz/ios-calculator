@@ -108,11 +108,21 @@
           "--source-map " + DIST_DIR + "/bundle.min.js.map " +
           "--source-map-url bundle.min.js.map " +
           "-p 2 -m -c --screw-ie8",
-          { interactive: true });
+          { interactive: true }, complete);
 
         console.log("Minifying the stylesheet: .");
         jake.exec("node node_modules/.bin/postcss --use autoprefixer --use cssnano -o generated/dist/style.css generated/dist/style.css",
-          { interactive: true });
+          { interactive: true }, complete);
+
+        console.log("Minifiying the markup: .");
+        jake.exec("node node_modules/.bin/html-minifier generated/dist/index.html -o generated/dist/index_min.html",
+          { interactive: true },
+          function() {
+            shell.mv(DIST_DIR + "/index_min.html", DIST_DIR + "/index.html");
+
+            complete();
+          });
+
         complete();
     });
   }, { async: true });
