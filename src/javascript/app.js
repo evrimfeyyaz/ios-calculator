@@ -107,6 +107,7 @@
       });
     }
 
+    // Adapted from: http://stackoverflow.com/a/10910547
     function preventZoom(e) {
       var t2 = e.timeStamp;
       var t1 = e.currentTarget.dataset.lastTouch || t2;
