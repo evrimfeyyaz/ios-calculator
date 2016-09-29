@@ -1,5 +1,5 @@
-iOS Calculator in JavaScript
-----------------------------
+iOS Calculator with HTML, CSS, and JS
+-------------------------------------
 
 <img src="ios-calculator-screenshot.png" width="320" height="540" alt="Screenshot of this project taken on an iPhone 5S using iOS 10 and Chrome browser">
 
