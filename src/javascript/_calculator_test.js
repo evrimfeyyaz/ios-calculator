@@ -538,6 +538,19 @@
       assertCurrentDisplayValue("2");
     });
 
+    it.only("uses the calculated percentage value in operation", function() {
+      pressNumber(2);
+      pressNumber(0);
+      pressNumber(0);
+      pressPercent();
+      pressAdd();
+      pressNumber(1);
+
+      pressEquals();
+
+      assertCurrentDisplayValue(3);
+    });
+
     it("uses the calculated percent value when repeating an operation", function() {
       pressNumber(1);
       pressNumber(0);

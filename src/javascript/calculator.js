@@ -304,7 +304,7 @@
   }
 
   function calculatePercentage() {
-    var displayValue = null;
+    var displayValue;
 
     if (hasPendingPriorityOperation()) {
       thirdOperand = getPercentage(secondOperand, thirdOperand);
@@ -313,7 +313,7 @@
       secondOperand = getPercentage(firstOperand, secondOperand);
       displayValue = secondOperand;
     } else {
-      firstOperand /= 100;
+      firstOperand = firstOperand.dividedBy(100);
       displayValue = firstOperand;
     }
 
