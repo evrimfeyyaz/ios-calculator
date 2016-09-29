@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>iOS Calculator with HTML, CSS, and JS</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="style.css">
+  <script defer="defer" src="bundle.min.js"></script>
+</head>
+<body>
+
+<div id="l-main">
+  <div class="calc">
+    <div class="calc-display">
+      <div class="content">
+        12
+      </div>
+    </div>
+    <div class="calc-buttons">
+      <button id="clear-button" class="calc-buttons-square">C</button>
+      <button id="change-sign-button"><sup id="change-sign-button-plus">+</sup>⁄<sub id="change-sign-button-minus">-</sub></button>
+      <button id="percent-button">%</button>
+      <button id="divide-button" class="calc-buttons-operation">÷</button>
+
+      <button id="seven-button" class="calc-buttons-square" data-value="7">7</button>
+      <button id="eight-button" data-value="8">8</button>
+      <button id="nine-button" data-value="9">9</button>
+      <button id="multiply-button" class="calc-buttons-operation">×</button>
+
+      <button id="four-button" class="calc-buttons-square" data-value="4">4</button>
+      <button id="five-button" data-value="5">5</button>
+      <button id="six-button" data-value="6">6</button>
+      <button id="subtract-button" class="calc-buttons-operation">-</button>
+
+      <button id="one-button" class="calc-buttons-square" data-value="1">1</button>
+      <button id="two-button" data-value="2">2</button>
+      <button id="three-button" data-value="3">3</button>
+      <button id="add-button" class="calc-buttons-operation">+</button>
+
+      <button id="zero-button" data-value="0">0</button>
+      <button id="decimal-button" class="calc-buttons-square">.</button>
+      <button id="equals-button">=</button>
+    </div>
+  </div>
+</div>
+
+<div class="author-info">
+  Made by Evrim Persembe (<a href="https://twitter.com/evrimfeyyaz" class="social-link">Twitter</a>, <a href="https://medium.com/@evrimfeyyaz" class="social-link">Medium</a>)
+</div>
+
+</body>
+</html>

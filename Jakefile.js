@@ -15,6 +15,7 @@
   var KARMA_CONFIG  = "karma.conf.js";
   var GENERATED_DIR = "generated";
   var DIST_DIR      = GENERATED_DIR + "/dist";
+  var GH_PAGES_DIR  = "docs";
 
   /* General-purpose tasks */
 
@@ -94,38 +95,37 @@
 
   desc("Build distribution directory");
   task("build", [ DIST_DIR ], function() {
+    var cmds = ["node node_modules/.bin/browserify src/javascript/app.js -o " + DIST_DIR + "/bundle.js",
+      "node node_modules/.bin/uglifyjs " + DIST_DIR + "/bundle.js " +
+      "-o " + DIST_DIR + "/bundle.min.js " +
+      "--source-map " + DIST_DIR + "/bundle.min.js.map " +
+      "--source-map-url bundle.min.js.map " +
+      "-p 2 -m -c --screw-ie8",
+      "node node_modules/.bin/postcss --use autoprefixer --use cssnano -o generated/dist/style.css generated/dist/style.css",
+      "node node_modules/.bin/html-minifier generated/dist/index.html -o generated/dist/index_min.html"];
+
     console.log("Building distribution directory: .");
 
     shell.rm("-rf", DIST_DIR + "/*");
     shell.cp("src/content/*", DIST_DIR);
 
-    jake.exec("node node_modules/.bin/browserify src/javascript/app.js -o " + DIST_DIR + "/bundle.js",
-      { interactive: true },
-      function() {
-        console.log("Minifying the JavaScript code: .");
-        jake.exec("node node_modules/.bin/uglifyjs " + DIST_DIR + "/bundle.js " +
-          "-o " + DIST_DIR + "/bundle.min.js " +
-          "--source-map " + DIST_DIR + "/bundle.min.js.map " +
-          "--source-map-url bundle.min.js.map " +
-          "-p 2 -m -c --screw-ie8",
-          { interactive: true }, complete);
-
-        console.log("Minifying the stylesheet: .");
-        jake.exec("node node_modules/.bin/postcss --use autoprefixer --use cssnano -o generated/dist/style.css generated/dist/style.css",
-          { interactive: true }, complete);
-
-        console.log("Minifiying the markup: .");
-        jake.exec("node node_modules/.bin/html-minifier generated/dist/index.html -o generated/dist/index_min.html",
-          { interactive: true },
-          function() {
-            shell.mv(DIST_DIR + "/index_min.html", DIST_DIR + "/index.html");
-
-            complete();
-          });
+    jake.exec(cmds,
+      {interactive: true}, function() {
+        shell.mv(DIST_DIR + "/index_min.html", DIST_DIR + "/index.html");
 
         complete();
-    });
+      });
   }, { async: true });
 
   directory(DIST_DIR);
+
+  desc("Build GitHub Pages");
+  task("gh-pages", [ GH_PAGES_DIR ], function() {
+    console.log("Building GitHub Pages directory: .");
+
+    shell.rm("-rf", GH_PAGES_DIR + "/*");
+    shell.cp(DIST_DIR + "/*", GH_PAGES_DIR);
+  });
+
+  directory(GH_PAGES_DIR);
 }());
