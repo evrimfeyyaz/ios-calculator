@@ -313,6 +313,7 @@
       secondOperand = getPercentage(firstOperand, secondOperand);
       displayValue = secondOperand;
     } else {
+      if (firstOperand === null) firstOperand = new Decimal(0);
       firstOperand = firstOperand.dividedBy(100);
       displayValue = firstOperand;
     }

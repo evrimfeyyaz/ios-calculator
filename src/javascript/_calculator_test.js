@@ -538,7 +538,7 @@
       assertCurrentDisplayValue("2");
     });
 
-    it.only("uses the calculated percentage value in operation", function() {
+    it("uses the calculated percentage value in operation", function() {
       pressNumber(2);
       pressNumber(0);
       pressNumber(0);
