@@ -9,19 +9,15 @@ html {
   box-sizing: inherit;
 }
 
-a {
-  text-decoration: none;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
   font-weight: 100;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 button {
@@ -34,6 +30,23 @@ button {
 button:focus,
 button:active {
   outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+p {
+  margin-bottom: 2vh;
+}
+
+.fork-me-github {
+  border: 0;
+  position: absolute;
+  left: 0;
+  max-height: 18vh;
+  top: 0;
+  z-index: 999;
 }
 
 #l-main {
