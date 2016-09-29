@@ -4914,6 +4914,7 @@
       });
     }
 
+    // Adapted from: http://stackoverflow.com/a/10910547
     function preventZoom(e) {
       var t2 = e.timeStamp;
       var t1 = e.currentTarget.dataset.lastTouch || t2;
@@ -5244,6 +5245,7 @@
       secondOperand = getPercentage(firstOperand, secondOperand);
       displayValue = secondOperand;
     } else {
+      if (firstOperand === null) firstOperand = new Decimal(0);
       firstOperand = firstOperand.dividedBy(100);
       displayValue = firstOperand;
     }
