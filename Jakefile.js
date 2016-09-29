@@ -11,6 +11,7 @@
   var jshint = require("simplebuild-jshint");
   var karma  = require("simplebuild-karma");
   var shell  = require("shelljs");
+  var fs     = require("fs");
 
   var KARMA_CONFIG  = "karma.conf.js";
   var GENERATED_DIR = "generated";
@@ -125,7 +126,25 @@
 
     shell.rm("-rf", GH_PAGES_DIR + "/*");
     shell.cp(DIST_DIR + "/*", GH_PAGES_DIR);
+
+    var indexHTML = fs.readFileSync(GH_PAGES_DIR + "/index.html", "utf8");
+    var indexHTMLwithAnalytics = getHTMLWithAnalytics(indexHTML);
+
+    fs.writeFile(GH_PAGES_DIR + "/index.html", indexHTMLwithAnalytics, "utf8");
   });
 
   directory(GH_PAGES_DIR);
+
+  function getHTMLWithAnalytics(HTML) {
+    var googleAnalyticsScriptTag = "<script>" +
+      "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" +
+      "    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," +
+      "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" +
+      "})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');" +
+      "ga('create', 'UA-84971715-1', 'auto');" +
+      "ga('send', 'pageview');" +
+      "</script>\n";
+
+    return HTML.replace("</body>", googleAnalyticsScriptTag + "</body>");
+  }
 }());
